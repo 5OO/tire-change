@@ -1,0 +1,13 @@
+{
+  "tireShops": [
+    {
+      "name": "London",
+      "address": "1A Gunton Rd, London",
+      "vehicleTypes": ["Car"],
+      "api": {
+        "endpoint": "http://localhost:9003/api/v1",
+        "type": "xml"
+      }
+    }
+  ]
+}
