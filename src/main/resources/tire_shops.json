@@ -5,7 +5,7 @@
       "address": "1A Gunton Rd, London",
       "vehicleTypes": ["Car"],
       "api": {
-        "endpoint": "http://localhost:9003/api/v1",
+        "endpoint": "http://localhost:9003/api/v1/tire-change-times/available",
         "type": "xml"
       }
     }
