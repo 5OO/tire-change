@@ -11,7 +11,7 @@ import org.tims.tirechange.model.TireChangeTime;
 import org.tims.tirechange.model.TireChangeTimesResponse;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
 @Component // Mark this as a Spring-managed bean
@@ -23,10 +23,10 @@ public class LondonApi implements TireShopApi {
     @Autowired
     private TireShopConfigLoader configLoader;
 
-    public List<TireChangeBooking> getAvailableTimes(LocalDateTime from, LocalDateTime until) throws IOException {
+    public List<TireChangeBooking> getAvailableTimes(LocalDate from, LocalDate until) throws IOException {
         // TODO: Implement logic to:
         // 1. Build the API request URL (use the configuration data)
-        TireShopConfig config = configLoader.loadConfig("tire_shops.json").get(0); // Load and retrieve config
+        TireShopConfig config = configLoader.loadConfig("src/main/resources/tire_shops.json").get(0); // Load and retrieve config
         String endpoint = config.getApi().getEndpoint();
 
         // Construct the request URL
@@ -41,9 +41,8 @@ public class LondonApi implements TireShopApi {
 // Access available times:
         List<TireChangeTime> availableTimes = response.getAvailableTimes();
         for (TireChangeTime time : availableTimes) {
-            System.out.println("UUID: " + time.getUuid());
-            System.out.println("Time: " + time.getTime());
-
+            System.out.println("public class LondonApi implements TireShopApi is here with UUID: " + time.getUuid());
+            System.out.println("public class LondonApi implements TireShopApi is here with Time: " + time.getTime());
 
 
 // TODO: Parse the XML response into TireChangeBooking objects
@@ -56,8 +55,14 @@ public class LondonApi implements TireShopApi {
         }
         return null;
     }
+
+//    @Override
+//    public List<TireChangeBooking> getAvailableTimes(LocalDate from, LocalDate until) throws IOException {
+//        return null;
+//    }
+
     @Override
-    public TireChangeBooking bookTimeSlot(String universalId, String contactInformation){
+    public TireChangeBooking bookTimeSlot(String universalId, String contactInformation) {
         // TODO: Similar logic as above, but for the booking PUT request
         return null;
     }
