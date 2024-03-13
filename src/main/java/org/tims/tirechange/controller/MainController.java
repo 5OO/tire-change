@@ -20,8 +20,8 @@ public class MainController {
 
     @GetMapping("/tire-changes/available")
     public List<TireChangeBooking> getAvailableTimes(
-            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate from,
-            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate until) throws IOException {
+            @RequestParam LocalDate from,
+            @RequestParam LocalDate until) throws IOException {
         return londonApi.getAvailableTimes(from, until);
     }
 }
