@@ -47,7 +47,8 @@ public class LondonApi implements TireShopApi {
         // Map to TireChangeBooking
         List<TireChangeTime> availableTimes = response.getAvailableTimes();
         if (availableTimes == null) {
-            throw new NoAvailableTimeslotsException("No available timeslots found for the given date range.");
+            String errorMessage = String.format("No available timeslots found for the given date range between %s and %s.", from.toString(), until.toString());
+            throw new NoAvailableTimeslotsException(errorMessage);
         } else {
             listAvailableTimes = response.getAvailableTimes().stream()
                     .map(time -> {
