@@ -6,11 +6,14 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import org.tims.tirechange.configuration.TireShopConfig;
 import org.tims.tirechange.configuration.TireShopConfigLoader;
+import org.tims.tirechange.exception.NoAvailableTimeslotsException;
 import org.tims.tirechange.model.TireChangeBooking;
+import org.tims.tirechange.model.TireChangeTime;
 import org.tims.tirechange.model.TireChangeTimesResponse;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -39,22 +42,27 @@ public class LondonApi implements TireShopApi {
         XmlMapper xmlMapper = new XmlMapper();
         TireChangeTimesResponse response = xmlMapper.readValue(xmlResponse, TireChangeTimesResponse.class);
 
+        List<TireChangeBooking> listAvailableTimes =  new ArrayList<>();
 
         // Map to TireChangeBooking
-        List<TireChangeBooking> availableTimes = response.getAvailableTimes().stream()
-                .map(time -> {
-                    TireChangeBooking availableTime = new TireChangeBooking();
-                    availableTime.setUniversalId(time.getUuid());
-                    availableTime.setBookingTime(java.time.OffsetDateTime.parse(time.getTime()).toLocalDateTime());
-                    availableTime.setAvailable(true);
-                    availableTime.setVehicleType(Arrays.toString(config.getVehicleTypes()));
-                    availableTime.setTireShopName(config.getName());
-                    availableTime.setTireShopAddress(config.getAddress());
-                    return availableTime;
-                })
-                .collect(Collectors.toList());
-
-        return availableTimes;
+        List<TireChangeTime> availableTimes = response.getAvailableTimes();
+        if (availableTimes == null) {
+            throw new NoAvailableTimeslotsException("No available timeslots found for the given date range.");
+        } else {
+            listAvailableTimes = response.getAvailableTimes().stream()
+                    .map(time -> {
+                        TireChangeBooking availableTime = new TireChangeBooking();
+                        availableTime.setUniversalId(time.getUuid());
+                        availableTime.setBookingTime(java.time.OffsetDateTime.parse(time.getTime()).toLocalDateTime());
+                        availableTime.setAvailable(true);
+                        availableTime.setVehicleType(Arrays.toString(config.getVehicleTypes()));
+                        availableTime.setTireShopName(config.getName());
+                        availableTime.setTireShopAddress(config.getAddress());
+                        return availableTime;
+                    })
+                    .collect(Collectors.toList());
+            }
+        return listAvailableTimes;
     }
 
     @Override
