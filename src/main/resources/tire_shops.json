@@ -1,5 +1,4 @@
-{
-  "tireShops": [
+[
     {
       "name": "London",
       "address": "1A Gunton Rd, London",
@@ -10,4 +9,3 @@
       }
     }
   ]
-}
