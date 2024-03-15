@@ -1,11 +1,11 @@
 package org.tims.tirechange.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 import org.tims.tirechange.api.LondonApi;
 import org.tims.tirechange.model.TireChangeBooking;
+import org.tims.tirechange.model.TireChangeTime;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -22,5 +22,16 @@ public class MainController {
             @RequestParam LocalDate from,
             @RequestParam LocalDate until) throws IOException {
         return londonApi.getAvailableTimes(from, until);
+    }
+
+    @PutMapping("/tire-changes/{universalID}/booking2")
+    public ResponseEntity<TireChangeTime> bookTimeSlot(@PathVariable String universalID, @RequestBody String clientContactInformation) throws IOException {
+        try {
+            TireChangeTime tireChangeTime = londonApi.bookTimeSlot(universalID, clientContactInformation);
+            return ResponseEntity.ok(tireChangeTime); // Return an 'OK' status
+        } catch (Exception e) {
+            // Handle booking errors
+            return ResponseEntity.internalServerError().build();
+        }
     }
 }
