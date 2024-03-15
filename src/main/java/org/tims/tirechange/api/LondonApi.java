@@ -67,8 +67,48 @@ public class LondonApi implements TireShopApi {
     }
 
     @Override
-    public TireChangeBooking bookTimeSlot(String universalId, String contactInformation) {
-        // TODO: Similar logic as above, but for the booking PUT request
-        return null;
+    public TireChangeTime bookTimeSlot(String universalId, String contactInformation) throws IOException {
+        // 1. Construct PUT request URL
+        TireShopConfig config = configLoader.loadConfig("src/main/resources/tire_shops.json").get(0);
+        String bookingEndpoint = config.getApi().getEndpoint() + universalId + "/booking";
+
+        // 2. Prepare XML request body
+        String requestBody = createBookingRequestXML(contactInformation);
+
+        // 3. Execute PUT request with RestTemplate (headers for XML)
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.TEXT_XML);
+        HttpEntity<String> entity = new HttpEntity<>(requestBody, headers);
+
+        ResponseEntity<String> response = restTemplate.exchange(bookingEndpoint, HttpMethod.PUT, entity, String.class);
+
+        // 4. Handle Response
+        if (response.getStatusCode() == HttpStatus.OK) {
+            // Parse response XML into TireChangeBooking
+            TireChangeTime bookingResponse = parseBookingResponseXML(response.getBody());
+            return bookingResponse;
+        } else {
+            // Throw appropriate exception based on error code
+            throw new RuntimeException("Booking failed - London API error");
+        }
     }
+
+    private String createBookingRequestXML(String clientContactInformation) {
+        return String.format("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
+                "<london.tireChangeBookingRequest>\n" +
+                "   <contactInformation> - %s</contactInformation>\n" +
+                "</london.tireChangeBookingRequest>", clientContactInformation);
+    }
+
+    private TireChangeTime parseBookingResponseXML(String xmlResponse) {
+        try {
+            XmlMapper xmlMapper = new XmlMapper(); // From com.fasterxml.jackson.dataformat.xml
+            TireChangeTime responseObject = xmlMapper.readValue(xmlResponse, TireChangeTime.class);
+            return responseObject;
+        } catch (Exception e) {
+            throw new RuntimeException("Error parsing booking response XML", e);
+        }
+    }
+
+
 }
