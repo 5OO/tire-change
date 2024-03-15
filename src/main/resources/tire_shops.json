@@ -1,11 +1,25 @@
 [
-    {
-      "name": "London",
-      "address": "1A Gunton Rd, London",
-      "vehicleTypes": ["Car"],
-      "api": {
-        "endpoint": "http://localhost:9003/api/v1/tire-change-times/",
-        "type": "xml"
-      }
+  {
+    "name": "London",
+    "address": "1A Gunton Rd, London",
+    "vehicleTypes": [
+      "Car"
+    ],
+    "api": {
+      "endpoint": "http://localhost:9003/api/v1/tire-change-times/",
+      "type": "xml"
     }
-  ]
+  },
+  {
+    "name": "Manchester",
+    "address": "14 Bury New Rd, Manchester",
+    "vehicleTypes": [
+      "Car",
+      "Truck"
+    ],
+    "api": {
+      "endpoint": "http://localhost:9004/api/v2/tire-change-times",
+      "type": "json"
+    }
+  }
+]
