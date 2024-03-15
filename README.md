@@ -38,7 +38,7 @@ This project aims to develop an application for booking vehicle tire change appo
 
 The tire workshop applications, API documentation, and source code are located at:
 
-* [https://github.com/5OO/TireChangeApplication](https://github.com/5OO/tire-change)
+* [https://github.com/Surmus/tire-change-workshop](https://github.com/5OO/tire-change)
 
 **Additional Notes**
 
