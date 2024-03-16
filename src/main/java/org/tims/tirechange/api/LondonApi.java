@@ -1,6 +1,10 @@
 package org.tims.tirechange.api;
 
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+import lombok.Builder;
+import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.stereotype.Component;
@@ -19,6 +23,8 @@ import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
+@RequiredArgsConstructor
+@Builder
 @Component // Mark this as a Spring-managed bean
 public class LondonApi implements TireShopApi {
 
@@ -69,10 +75,11 @@ public class LondonApi implements TireShopApi {
     }
 
     @Override
-    public TireChangeTime bookTimeSlot(String universalId, String contactInformation) throws IOException {
+    public LondonTireChangeTime bookTimeSlot(String universalId, String contactInformation) throws IOException {
         // 1. Construct PUT request URL
         TireShopConfig config = configLoader.loadConfig("src/main/resources/tire_shops.json").get(0);
         String bookingEndpoint = config.getApi().getEndpoint() + universalId + "/booking";
+        logger.debug("This is a debug message of booking endpoint" + bookingEndpoint);
 
         // 2. Prepare XML request body
         String requestBody = createBookingRequestXML(contactInformation);
@@ -82,14 +89,20 @@ public class LondonApi implements TireShopApi {
         headers.setContentType(MediaType.TEXT_XML);
         HttpEntity<String> entity = new HttpEntity<>(requestBody, headers);
 
+
         ResponseEntity<String> response = restTemplate.exchange(bookingEndpoint, HttpMethod.PUT, entity, String.class);
+        logger.info("This is an info message" + response.getStatusCode());
 
         // 4. Handle Response
         if (response.getStatusCode() == HttpStatus.OK) {
             // Parse response XML into TireChangeBooking
-            TireChangeTime bookingResponse = parseBookingResponseXML(response.getBody());
+            LondonTireChangeTime bookingResponse = parseBookingResponseXML(response.getBody());
+            logger.info(" if lause see olen " + bookingResponse);
+
             return bookingResponse;
         } else {
+            logger.info(" olen else sees ");
+
             // Throw appropriate exception based on error code
             throw new RuntimeException("Booking failed - London API error");
         }

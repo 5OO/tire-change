@@ -1,18 +1,15 @@
 package org.tims.tirechange.model;
 
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDate;
+
 @Getter
 @Setter
-@JacksonXmlRootElement(localName = "availableTime")
 public class TireChangeTime {
 
-    @JacksonXmlProperty(isAttribute = true)
-    private String uuid;
+    private String universalId;
 
-    @JacksonXmlProperty
-    private String time;
+    private LocalDate bookingTime;
 }
