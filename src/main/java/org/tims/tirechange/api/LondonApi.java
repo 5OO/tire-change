@@ -28,6 +28,8 @@ public class LondonApi implements TireShopApi {
 
     final private TireShopConfigLoader configLoader;
 
+    private static final Logger logger = LoggerFactory.getLogger(LondonApi.class);
+
     public List<TireChangeBooking> getAvailableTimes(LocalDate from, LocalDate until) throws IOException {
         // 1. Build the API request URL (use the configuration data)
         TireShopConfig config = configLoader.loadConfig("src/main/resources/tire_shops.json").get(0); // Load and retrieve config
