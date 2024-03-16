@@ -14,5 +14,5 @@ import java.util.List;
 public class TireChangeTimesResponse {
     @JacksonXmlElementWrapper(useWrapping = false)
     @JacksonXmlProperty(localName = "availableTime")
-    private List<TireChangeTime> availableTimes;
+    private List<LondonTireChangeTime> availableTimes;
 }

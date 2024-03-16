@@ -24,7 +24,7 @@ public class MainController {
         return londonApi.getAvailableTimes(from, until);
     }
 
-    @PutMapping("/tire-changes/{universalID}/booking2")
+    @PutMapping("/tire-changes/{universalID}/booking")
     public ResponseEntity<TireChangeTime> bookTimeSlot(@PathVariable String universalID, @RequestBody String clientContactInformation) throws IOException {
         try {
             TireChangeTime tireChangeTime = londonApi.bookTimeSlot(universalID, clientContactInformation);

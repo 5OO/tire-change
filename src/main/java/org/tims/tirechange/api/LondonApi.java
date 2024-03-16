@@ -2,30 +2,31 @@ package org.tims.tirechange.api;
 
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.*;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import org.tims.tirechange.configuration.TireShopConfig;
 import org.tims.tirechange.configuration.TireShopConfigLoader;
 import org.tims.tirechange.exception.NoAvailableTimeslotsException;
+import org.tims.tirechange.model.LondonTireChangeTime;
 import org.tims.tirechange.model.TireChangeBooking;
 import org.tims.tirechange.model.TireChangeTime;
 import org.tims.tirechange.model.TireChangeTimesResponse;
 
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.time.LocalDateTime;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Component // Mark this as a Spring-managed bean
 public class LondonApi implements TireShopApi {
 
-    @Autowired
-    private RestTemplate restTemplate;
 
-    @Autowired
-    private TireShopConfigLoader configLoader;
+    final private RestTemplate restTemplate;
+
+
+    final private TireShopConfigLoader configLoader;
 
     public List<TireChangeBooking> getAvailableTimes(LocalDate from, LocalDate until) throws IOException {
         // 1. Build the API request URL (use the configuration data)
@@ -42,15 +43,15 @@ public class LondonApi implements TireShopApi {
         XmlMapper xmlMapper = new XmlMapper();
         TireChangeTimesResponse response = xmlMapper.readValue(xmlResponse, TireChangeTimesResponse.class);
 
-        List<TireChangeBooking> listAvailableTimes =  new ArrayList<>();
+        List<LondonTireChangeTime> listAvailableTimes =  new ArrayList<>();
 
         // Map to TireChangeBooking
-        List<TireChangeTime> availableTimes = response.getAvailableTimes();
+        List<LondonTireChangeTime> availableTimes = response.getAvailableTimes();
         if (availableTimes == null) {
             String errorMessage = String.format("No available timeslots found for the given date range between %s and %s.", from.toString(), until.toString());
             throw new NoAvailableTimeslotsException(errorMessage);
         } else {
-            listAvailableTimes = response.getAvailableTimes().stream()
+            return response.getAvailableTimes().stream()
                     .map(time -> {
                         TireChangeBooking availableTime = new TireChangeBooking();
                         availableTime.setUniversalId(time.getUuid());
@@ -63,7 +64,6 @@ public class LondonApi implements TireShopApi {
                     })
                     .collect(Collectors.toList());
             }
-        return listAvailableTimes;
     }
 
     @Override
