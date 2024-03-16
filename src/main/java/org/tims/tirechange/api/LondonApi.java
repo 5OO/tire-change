@@ -75,7 +75,7 @@ public class LondonApi implements TireShopApi {
     }
 
     @Override
-    public LondonTireChangeTime bookTimeSlot(String universalId, String contactInformation) throws IOException {
+    public TireChangeTime bookTimeSlot(String universalId, String contactInformation) throws IOException {
         // 1. Construct PUT request URL
         TireShopConfig config = configLoader.loadConfig("src/main/resources/tire_shops.json").get(0);
         String bookingEndpoint = config.getApi().getEndpoint() + universalId + "/booking";
@@ -96,7 +96,7 @@ public class LondonApi implements TireShopApi {
         // 4. Handle Response
         if (response.getStatusCode() == HttpStatus.OK) {
             // Parse response XML into TireChangeBooking
-            LondonTireChangeTime bookingResponse = parseBookingResponseXML(response.getBody());
+            TireChangeTime bookingResponse = parseBookingResponseXML(response.getBody());
             logger.info(" if lause see olen " + bookingResponse);
 
             return bookingResponse;
