@@ -46,10 +46,9 @@ public class LondonApi implements TireShopApi {
         XmlMapper xmlMapper = new XmlMapper();
         TireChangeTimesResponse response = xmlMapper.readValue(xmlResponse, TireChangeTimesResponse.class);
 
-        List<LondonTireChangeTime> listAvailableTimes = new ArrayList<>();
-
         // Map to TireChangeBooking
         List<LondonTireChangeTime> availableTimes = response.getAvailableTimes();
+
         if (availableTimes == null) {
             String errorMessage = String.format("No available timeslots found for the given date range between %s and %s.", from.toString(), until.toString());
             throw new NoAvailableTimeslotsException(errorMessage);
@@ -74,7 +73,8 @@ public class LondonApi implements TireShopApi {
         // 1. Construct PUT request URL
         TireShopConfig config = configLoader.loadConfig("src/main/resources/tire_shops.json").get(0);
         String bookingEndpoint = config.getApi().getEndpoint() + universalId + "/booking";
-        logger.debug("This is a debug message of booking endpoint" + bookingEndpoint);
+
+        logger.debug("This is a debug message of booking endpoint");
 
         // 2. Prepare XML request body
         String requestBody = createBookingRequestXML(contactInformation);
@@ -86,6 +86,7 @@ public class LondonApi implements TireShopApi {
 
 
         ResponseEntity<String> response = restTemplate.exchange(bookingEndpoint, HttpMethod.PUT, entity, String.class);
+
         logger.info("This is an info message" + response.getStatusCode());
 
         // 4. Handle Response
