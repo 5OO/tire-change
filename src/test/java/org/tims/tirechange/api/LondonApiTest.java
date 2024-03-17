@@ -17,10 +17,10 @@ import org.tims.tirechange.model.TireChangeTimesResponse;
 import java.io.IOException;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-public class LondonApiTest {
+class LondonApiTest {
 
     //    @MockitoSettings(strictness = Strictness.LENIENT)
     @Test
@@ -118,6 +118,44 @@ public class LondonApiTest {
         LondonTireChangeTime bookingResponse = londonApi.bookTimeSlot("950b1c72-e319-4cfa-88ad-23b74b5851be", "contact-info");
 
         assertNotNull(bookingResponse);
+    }
+
+    @Test
+    void testBookTimeSlot_Failure() throws Exception {
+        //Arrange
+        TireShopConfigLoader mockConfigLoader = mock(TireShopConfigLoader.class);
+        RestTemplate mockRestTemplate = mock(RestTemplate.class);
+        BookingResponseParser mockResponseParser = mock(BookingResponseParser.class);
+
+        TireShopConfig testConfig = new TireShopConfig();
+
+        ApiConfig apiConfig = new ApiConfig();
+        apiConfig.setEndpoint("http://localhost:9003/api/v1/tire-change-times/");
+        apiConfig.setType("xml");
+        testConfig.setApi(apiConfig);
+
+        // Simulate a failure scenario with HttpStatus.INTERNAL_SERVER_ERROR
+
+        ResponseEntity<String> responseEntity = new ResponseEntity<>("", HttpStatus.INTERNAL_SERVER_ERROR);
+        when(mockConfigLoader.loadConfig("src/main/resources/tire_shops.json")).thenReturn(List.of(testConfig));
+
+        when(mockRestTemplate.exchange(
+                eq("http://localhost:9003/api/v1/tire-change-times/950b1c72-e319-4cfa-88ad-23b74b5851be/booking"),
+                eq(HttpMethod.PUT),
+                any(HttpEntity.class),
+                eq(String.class)
+        )).thenReturn(responseEntity);
+
+        LondonApi londonApi = new LondonApi(mockResponseParser, mockRestTemplate, mockConfigLoader);
+
+        // Act & Assert
+        Exception exception = assertThrows(
+                RuntimeException.class,
+                () -> londonApi.bookTimeSlot("950b1c72-e319-4cfa-88ad-23b74b5851be", "contact-info")
+        );
+
+        // Verify the correct failure message
+        assertEquals("Booking failed - London API error", exception.getMessage());
     }
 }
 
