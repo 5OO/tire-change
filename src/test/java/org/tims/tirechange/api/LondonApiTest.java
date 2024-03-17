@@ -1,9 +1,7 @@
 package org.tims.tirechange.api;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.web.client.RestTemplate;
 import org.tims.tirechange.configuration.ApiConfig;
 import org.tims.tirechange.configuration.TireShopConfig;
@@ -18,7 +16,6 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
-@ExtendWith(MockitoExtension.class)
 public class LondonApiTest {
     @Test
     void testGetAvailableTimes_noTimeSlots() throws IOException {
