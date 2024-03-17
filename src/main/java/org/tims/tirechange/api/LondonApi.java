@@ -1,11 +1,9 @@
 package org.tims.tirechange.api;
 
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
-import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
@@ -19,22 +17,19 @@ import org.tims.tirechange.model.TireChangeTimesResponse;
 
 import java.io.IOException;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
-@Builder
 @Component // Mark this as a Spring-managed bean
 public class LondonApi implements TireShopApi {
 
 
-    final private RestTemplate restTemplate;
-
-
-    final private TireShopConfigLoader configLoader;
-
     private static final Logger logger = LoggerFactory.getLogger(LondonApi.class);
+    final private RestTemplate restTemplate;
+    final private TireShopConfigLoader configLoader;
 
     public List<TireChangeBooking> getAvailableTimes(LocalDate from, LocalDate until) throws IOException {
         // 1. Build the API request URL (use the configuration data)
@@ -51,7 +46,7 @@ public class LondonApi implements TireShopApi {
         XmlMapper xmlMapper = new XmlMapper();
         TireChangeTimesResponse response = xmlMapper.readValue(xmlResponse, TireChangeTimesResponse.class);
 
-        List<LondonTireChangeTime> listAvailableTimes =  new ArrayList<>();
+        List<LondonTireChangeTime> listAvailableTimes = new ArrayList<>();
 
         // Map to TireChangeBooking
         List<LondonTireChangeTime> availableTimes = response.getAvailableTimes();
@@ -71,7 +66,7 @@ public class LondonApi implements TireShopApi {
                         return availableTime;
                     })
                     .collect(Collectors.toList());
-            }
+        }
     }
 
     @Override

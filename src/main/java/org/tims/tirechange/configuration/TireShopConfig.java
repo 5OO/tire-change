@@ -1,9 +1,7 @@
 package org.tims.tirechange.configuration;
 
-import lombok.Builder;
 import lombok.Data;
 
-//@Builder
 @Data
 public class TireShopConfig {
     private String name;
