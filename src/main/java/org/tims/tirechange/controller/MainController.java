@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.*;
 import org.tims.tirechange.api.LondonApi;
 import org.tims.tirechange.model.LondonTireChangeTime;
 import org.tims.tirechange.model.TireChangeBooking;
-import org.tims.tirechange.model.TireChangeTime;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -26,9 +25,9 @@ public class MainController {
     }
 
     @PutMapping("/tire-changes/{universalID}/booking")
-    public ResponseEntity<TireChangeTime> bookTimeSlot(@PathVariable String universalID, @RequestBody String clientContactInformation) throws IOException {
+    public ResponseEntity<LondonTireChangeTime> bookTimeSlot(@PathVariable String universalID, @RequestBody String clientContactInformation) throws IOException {
         try {
-            TireChangeTime londonTireChangeTime = londonApi.bookTimeSlot(universalID, clientContactInformation);
+            LondonTireChangeTime londonTireChangeTime = londonApi.bookTimeSlot(universalID, clientContactInformation);
             return ResponseEntity.ok(londonTireChangeTime); // Return an 'OK' status
         } catch (Exception e) {
             // Handle booking errors

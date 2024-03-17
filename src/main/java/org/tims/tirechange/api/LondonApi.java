@@ -12,12 +12,10 @@ import org.tims.tirechange.configuration.TireShopConfigLoader;
 import org.tims.tirechange.exception.NoAvailableTimeslotsException;
 import org.tims.tirechange.model.LondonTireChangeTime;
 import org.tims.tirechange.model.TireChangeBooking;
-import org.tims.tirechange.model.TireChangeTime;
 import org.tims.tirechange.model.TireChangeTimesResponse;
 
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -69,7 +67,7 @@ public class LondonApi implements TireShopApi {
     }
 
     @Override
-    public TireChangeTime bookTimeSlot(String universalId, String contactInformation) throws IOException {
+    public LondonTireChangeTime bookTimeSlot(String universalId, String contactInformation) throws IOException {
         // 1. Construct PUT request URL
         TireShopConfig config = configLoader.loadConfig("src/main/resources/tire_shops.json").get(0);
         String bookingEndpoint = config.getApi().getEndpoint() + universalId + "/booking";
@@ -92,7 +90,7 @@ public class LondonApi implements TireShopApi {
         // 4. Handle Response
         if (response.getStatusCode() == HttpStatus.OK) {
             // Parse response XML into TireChangeBooking
-            TireChangeTime bookingResponse = parseBookingResponseXML(response.getBody());
+            LondonTireChangeTime bookingResponse = parseBookingResponseXML(response.getBody());
             logger.info(" if lause see olen " + bookingResponse);
 
             return bookingResponse;
@@ -111,10 +109,10 @@ public class LondonApi implements TireShopApi {
                 "</london.tireChangeBookingRequest>", clientContactInformation);
     }
 
-    private TireChangeTime parseBookingResponseXML(String xmlResponse) {
+    private LondonTireChangeTime parseBookingResponseXML(String xmlResponse) {
         try {
             XmlMapper xmlMapper = new XmlMapper(); // From com.fasterxml.jackson.dataformat.xml
-            TireChangeTime responseObject = xmlMapper.readValue(xmlResponse, TireChangeTime.class);
+            LondonTireChangeTime responseObject = xmlMapper.readValue(xmlResponse, LondonTireChangeTime.class);
             return responseObject;
         } catch (Exception e) {
             throw new RuntimeException("Error parsing booking response XML", e);

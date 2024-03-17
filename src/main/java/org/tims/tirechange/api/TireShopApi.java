@@ -1,7 +1,7 @@
 package org.tims.tirechange.api;
 
+import org.tims.tirechange.model.LondonTireChangeTime;
 import org.tims.tirechange.model.TireChangeBooking;
-import org.tims.tirechange.model.TireChangeTime;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -11,6 +11,6 @@ public interface TireShopApi {
     List<TireChangeBooking> getAvailableTimes(LocalDate from,
                                               LocalDate until) throws IOException;
 
-    TireChangeTime bookTimeSlot(String universalId,
-                                String contactInformation) throws IOException;
+    LondonTireChangeTime bookTimeSlot(String universalId,
+                                      String contactInformation) throws IOException;
 }
