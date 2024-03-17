@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.*;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
+import org.tims.tirechange.configuration.BookingResponseParser;
 import org.tims.tirechange.configuration.TireShopConfig;
 import org.tims.tirechange.configuration.TireShopConfigLoader;
 import org.tims.tirechange.exception.NoAvailableTimeslotsException;
@@ -26,6 +27,7 @@ public class LondonApi implements TireShopApi {
 
 
     private static final Logger logger = LoggerFactory.getLogger(LondonApi.class);
+    final private BookingResponseParser responseParser;
     final private RestTemplate restTemplate;
     final private TireShopConfigLoader configLoader;
 
@@ -90,7 +92,7 @@ public class LondonApi implements TireShopApi {
         // 4. Handle Response
         if (response.getStatusCode() == HttpStatus.OK) {
             // Parse response XML into TireChangeBooking
-            LondonTireChangeTime bookingResponse = parseBookingResponseXML(response.getBody());
+            LondonTireChangeTime bookingResponse = responseParser.parseBookingResponseXML(response.getBody());
             logger.info(" if lause see olen " + bookingResponse);
 
             return bookingResponse;
@@ -107,16 +109,6 @@ public class LondonApi implements TireShopApi {
                 "<london.tireChangeBookingRequest>\n" +
                 "   <contactInformation> - %s</contactInformation>\n" +
                 "</london.tireChangeBookingRequest>", clientContactInformation);
-    }
-
-    private LondonTireChangeTime parseBookingResponseXML(String xmlResponse) {
-        try {
-            XmlMapper xmlMapper = new XmlMapper(); // From com.fasterxml.jackson.dataformat.xml
-            LondonTireChangeTime responseObject = xmlMapper.readValue(xmlResponse, LondonTireChangeTime.class);
-            return responseObject;
-        } catch (Exception e) {
-            throw new RuntimeException("Error parsing booking response XML", e);
-        }
     }
 
 
