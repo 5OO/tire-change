@@ -38,13 +38,16 @@ public class LondonApi implements TireShopApi {
 
         // Construct the request URL
         String url = endpoint + "available?from=" + from + "&until=" + until;
+        logger.info("url for 'get' created ...");
 
         // 2. Make an HTTP GET request to the London API
         String xmlResponse = restTemplate.getForObject(url, String.class);
+        logger.info("GET request completed ...");
 
         // Parse XML
         XmlMapper xmlMapper = new XmlMapper();
         TireChangeTimesResponse response = xmlMapper.readValue(xmlResponse, TireChangeTimesResponse.class);
+        logger.info("parsing completed ...");
 
         // Map to TireChangeBooking
         List<LondonTireChangeTime> availableTimes = response.getAvailableTimes();
@@ -74,8 +77,6 @@ public class LondonApi implements TireShopApi {
         TireShopConfig config = configLoader.loadConfig("src/main/resources/tire_shops.json").get(0);
         String bookingEndpoint = config.getApi().getEndpoint() + universalId + "/booking";
 
-        logger.debug("This is a debug message of booking endpoint");
-
         // 2. Prepare XML request body
         String requestBody = createBookingRequestXML(contactInformation);
 
@@ -84,21 +85,18 @@ public class LondonApi implements TireShopApi {
         headers.setContentType(MediaType.TEXT_XML);
         HttpEntity<String> entity = new HttpEntity<>(requestBody, headers);
 
-
         ResponseEntity<String> response = restTemplate.exchange(bookingEndpoint, HttpMethod.PUT, entity, String.class);
 
-        logger.info("This is an info message" + response.getStatusCode());
+        logger.info(" PUT execution done ... ");
 
         // 4. Handle Response
         if (response.getStatusCode() == HttpStatus.OK) {
             // Parse response XML into TireChangeBooking
             LondonTireChangeTime bookingResponse = responseParser.parseBookingResponseXML(response.getBody());
-            logger.info(" if lause see olen " + bookingResponse);
-
+            logger.info(" status code is 200 OK, parsing XML done ");
             return bookingResponse;
         } else {
-            logger.info(" olen else sees ");
-
+            logger.info("PUT failed, throwing an error message ");
             // Throw appropriate exception based on error code
             throw new RuntimeException("Booking failed - London API error");
         }
@@ -110,6 +108,4 @@ public class LondonApi implements TireShopApi {
                 "   <contactInformation> - %s</contactInformation>\n" +
                 "</london.tireChangeBookingRequest>", clientContactInformation);
     }
-
-
 }
