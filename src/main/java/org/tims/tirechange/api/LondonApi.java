@@ -25,7 +25,6 @@ import java.util.stream.Collectors;
 @Component // Mark this as a Spring-managed bean
 public class LondonApi implements TireShopApi {
 
-
     private static final Logger logger = LoggerFactory.getLogger(LondonApi.class);
     final private BookingResponseParser responseParser;
     final private RestTemplate restTemplate;

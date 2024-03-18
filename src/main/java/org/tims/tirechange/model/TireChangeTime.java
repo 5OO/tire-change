@@ -10,6 +10,5 @@ import java.time.LocalDate;
 public class TireChangeTime {
 
     private String universalId;
-
     private LocalDate bookingTime;
 }
