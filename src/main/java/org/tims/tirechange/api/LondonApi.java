@@ -46,7 +46,7 @@ public class LondonApi implements TireShopApi {
         // Parse XML
         XmlMapper xmlMapper = new XmlMapper();
         TireChangeTimesResponse response = xmlMapper.readValue(xmlResponse, TireChangeTimesResponse.class);
-        logger.info("parsing completed ...");
+        logger.info("XML parsing completed ...");
 
         // Map to TireChangeBooking
         List<LondonTireChangeTime> availableTimes = response.getAvailableTimes();

@@ -21,5 +21,18 @@
       "endpoint": "http://localhost:9004/api/v2/tire-change-times/",
       "type": "json"
     }
+  },
+  {
+    "name": "York",
+    "address": "666 VeryBlurry Rd, York",
+    "vehicleTypes": [
+      "Car",
+      "Truck",
+      "Bike"
+    ],
+    "api": {
+      "endpoint": "http://localhost:9005/api/v2/tire-change-times/",
+      "type": "json"
+    }
   }
 ]
