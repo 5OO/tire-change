@@ -30,13 +30,13 @@
       <th>Tire Shop</th>
       <th>Address</th>
       <th>Time Slot</th>
-      <th> </th> </tr>
+      <th>Vehicle Type </th> </tr>
     </thead>
     <tbody>
     <tr th:each="booking : ${bookings}">
       <td th:text="${booking.tireShopName}"></td>
       <td th:text="${booking.tireShopAddress}"></td>
-      <td th:text="${booking.bookingTime}"></td>
+      <td th:text="${#temporals.format(booking.bookingTime, 'dd-MMMM-yyyy HH:mm ')}"></td>
       <td th:text="${booking.vehicleType}"></td>
     </tr>
     </tbody>

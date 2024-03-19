@@ -12,6 +12,7 @@ import org.tims.tirechange.model.TireChangeBooking;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -45,7 +46,7 @@ public class TireShopService {
 
                     allResults.addAll(manchesterApi.getAvailableTimes(from, until)
                             .stream()
-                            .map(this::mapManchesterToTireChangeBooking)
+                            .map(manchesterTime -> mapManchesterToTireChangeBooking(manchesterTime, shop))
                             .collect(Collectors.toList()));
                 }
             }
@@ -55,14 +56,15 @@ public class TireShopService {
         return allResults;
     }
 
-    private TireChangeBooking mapManchesterToTireChangeBooking(ManchesterTireChangeTime manchesterTime) {
+    private TireChangeBooking mapManchesterToTireChangeBooking(ManchesterTireChangeTime manchesterTime, TireShopConfig currentShopConfig) {
         TireChangeBooking booking = new TireChangeBooking();
-        booking.setUniversalId(String.valueOf(manchesterTime.getId())); // Adapt if needed
+        booking.setUniversalId(String.valueOf(manchesterTime.getId()));
         booking.setBookingTime(manchesterTime.getBookingTime());
         booking.setAvailable(manchesterTime.isAvailable());
-        // ... Set other fields of TireChangeBooking based on ManchesterTireChangeTime
-        booking.setApiIdentifier("Manchester"); // Indicate the origin
-
+        booking.setTireShopName(currentShopConfig.getName());
+        booking.setTireShopAddress(currentShopConfig.getAddress());
+        booking.setVehicleType(Arrays.toString(currentShopConfig.getVehicleTypes()));
+        booking.setApiIdentifier("Manchester");
         return booking;
     }
 }
