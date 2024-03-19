@@ -22,7 +22,7 @@ import java.util.List;
 @Component
 public class ManchesterApi {
 
-    private static final Logger logger = LoggerFactory.getLogger(LondonApi.class);
+    private static final Logger logger = LoggerFactory.getLogger(ManchesterApi.class);
     private final RestTemplate restTemplate;
     private final TireShopConfigLoader configLoader;
 
