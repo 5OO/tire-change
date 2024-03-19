@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.tims.tirechange.api.LondonApi;
+import org.tims.tirechange.api.TireShopService;
 import org.tims.tirechange.model.LondonTireChangeTime;
 import org.tims.tirechange.model.TireChangeBooking;
 
@@ -16,6 +17,9 @@ public class MainController {
 
     @Autowired
     private LondonApi londonApi;
+
+    @Autowired
+    private TireShopService tireShopService;
 
     @GetMapping("/tire-changes/available")
     public List<TireChangeBooking> getAvailableTimes(
@@ -34,5 +38,14 @@ public class MainController {
             // Handle booking errors
             return ResponseEntity.internalServerError().build();
         }
+    }
+
+    @GetMapping("/tire-changes/available/{tireShopName}/{vehicleType}")
+    public List<TireChangeBooking> findAvailableTimes(
+            @RequestParam LocalDate from,
+            @RequestParam LocalDate until,
+            @PathVariable(required = false) String tireShopName,
+            @PathVariable String vehicleType) throws IOException {
+        return tireShopService.findAvailableTimes(from, until, tireShopName, vehicleType);
     }
 }
