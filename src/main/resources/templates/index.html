@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Tire Change Booking</title>
+  <link rel="stylesheet" href="/styles.css"> </head> <body>
+
+<div class="filters">
+  <h3>Filters:</h3>
+  <select id="tireShopDropdown" multiple>
+    <option th:each="shop : ${tireShops}"
+            th:value="${shop.name}"
+            th:text="${shop.name}">
+    </option>
+  </select>
+
+  <div id="vehicleTypeCheckboxes">
+  </div>
+
+  <input type="date" id="startDate">
+  <input type="date" id="endDate">
+  <button id="applyFilters">Apply</button>
+</div>
+
+<div class="results">
+  <h3>Available Time Slots:</h3>
+  <table id="resultsTable">
+    <thead>
+    <tr>
+      <th>Tire Shop</th>
+      <th>Address</th>
+      <th>Time Slot</th>
+      <th> </th> </tr>
+    </thead>
+    <tbody>
+    <tr th:each="booking : ${bookings}">
+      <td th:text="${booking.tireShopName}"></td>
+      <td th:text="${booking.tireShopAddress}"></td>
+      <td th:text="${booking.bookingTime}"></td>
+      <td th:text="${booking.vehicleType}"></td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+
+
+<script src="/js/script.js"></script>
+
+</body>
+</html>
