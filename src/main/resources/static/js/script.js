@@ -64,8 +64,6 @@ function updateVehicleCheckboxes(vehicleTypes) {
 // ... (Flatpickr initialization and 'Apply' button logic
 flatpickr("#dateRange", {
     mode: "range", // Enable range selection mode
-    // dateFormat: "d-m-Y",
-    // ... other Flatpickr configuration options ...
 });
 
 // Apply button logic
