@@ -86,10 +86,10 @@ applyButton.addEventListener("click", () => {
     // Send AJAX request to backend with startDate and endDate
 
     fetch("/tire-changes-available?from=" + startDate + "&until=" + endDate)
-        .then(response => response.json())
-        .then(data => {
+        .then(response => response.text())
+        .then(htmlString => {
             // Update table display
-            updateTable(data);
+            updateTable(htmlString);
         })
         .catch(error => console.error("Error fetching data:", error));
 
