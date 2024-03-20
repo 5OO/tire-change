@@ -52,7 +52,15 @@ public class TireShopService {
             }
         }
 
-        // Filter aggregated results based on vehicleType (add filtering logic here)
+        // Filter aggregated results based on vehicleType
+        if (vehicleTypes != null && !vehicleTypes.isEmpty()) {
+            allResults = allResults.stream()
+                    .filter(booking -> vehicleTypes.contains(booking.getVehicleType()))
+                    .collect(Collectors.toList());
+        }
+
+
+
         return allResults;
     }
 
