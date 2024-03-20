@@ -1,5 +1,12 @@
 const vehicleTypeCheckboxes = document.getElementById("vehicleTypeCheckboxes");
+const tireShopDropdown = document.getElementById("tireShopDropdown");
+
+
 // Function to get selected tire shops
+function getSelectedTireShops() {
+    const selectedOptions = [...tireShopDropdown.selectedOptions];
+    return selectedOptions.map(option => option.value);
+}
 
 tireShopDropdown.addEventListener("change", () => {
     const selectedShopName = tireShopDropdown.value;
@@ -7,11 +14,7 @@ tireShopDropdown.addEventListener("change", () => {
         .then(vehicleTypes => updateVehicleCheckboxes(vehicleTypes));
 });
 
-function getSelectedTireShops() {
-    const tireShopDropdown = document.getElementById("tireShopDropdown");
-    const selectedOptions = [...tireShopDropdown.selectedOptions];
-    return selectedOptions.map(option => option.value);
-}
+
 
 // Function to get selected vehicle types
 function getSelectedVehicleTypes() {
@@ -29,8 +32,20 @@ function fetchAvailableVehicleTypes(shopName) {
 }
 
 
+const vehicleTypeCheckboxesDiv = document.getElementById("vehicleTypeCheckboxes");
+
 function updateVehicleCheckboxes(vehicleTypes) {
     vehicleTypeCheckboxes.innerHTML = ''; // Clear existing checkboxes
+
+    // Only calculate allVehicleTypes if needed for initial population
+    let allVehicleTypes = null;
+    if (!vehicleTypes) {
+        allVehicleTypes = new Set();
+        tireShops.forEach(shop => shop.vehicleTypes.forEach(type => allVehicleTypes.add(type)));
+    }
+
+    const types = vehicleTypes || [...allVehicleTypes]; // Use provided types or all types
+
     vehicleTypes.forEach(vehicleType => {
         let checkbox = document.createElement('input');
         checkbox.type = 'checkbox';
@@ -46,31 +61,10 @@ function updateVehicleCheckboxes(vehicleTypes) {
     });
 }
 
-const vehicleTypeCheckboxesDiv = document.getElementById("vehicleTypeCheckboxes");
-
-// Assuming tireShops is your config data and each shop has 'vehicleTypes'
-const allVehicleTypes = new Set();
-tireShops.forEach(shop => shop.vehicleTypes.forEach(type => allVehicleTypes.add(type)));
-
-allVehicleTypes.forEach(vehicleType => {
-    const checkbox = document.createElement("input");
-    checkbox.type = "checkbox";
-    checkbox.value = vehicleType;
-    checkbox.id = vehicleType; // Add an ID for easier selection
-
-    const label = document.createElement("label");
-    label.htmlFor = vehicleType;
-    label.textContent = vehicleType;
-
-    vehicleTypeCheckboxesDiv.appendChild(checkbox);
-    vehicleTypeCheckboxesDiv.appendChild(label);
-    vehicleTypeCheckboxesDiv.appendChild(document.createElement("br"));
-});
-
-
 // ... (Flatpickr initialization and 'Apply' button logic
 flatpickr("#dateRange", {
     mode: "range", // Enable range selection mode
+    // dateFormat: "d-m-Y",
     // ... other Flatpickr configuration options ...
 });
 
@@ -103,24 +97,18 @@ applyButton.addEventListener("click", () => {
 
     function updateTable(data) {
         const tableBody = document.getElementById("resultsTable").querySelector("tbody");
-        tableBody.innerHTML = ""; // Clear existing rows
+        tableBody.innerHTML = ''; // Clear existing rows
 
-        data.forEach(booking => {
-            const row = tableBody.insertRow();
+        const tempContainer = document.createElement('div'); // Create a temporary container
+        tempContainer.innerHTML = data; // Put the received HTML into the container
 
-            const shopCell = row.insertCell();
-            shopCell.textContent = booking.tireShopName;
+        const newRows = tempContainer.querySelectorAll("table tbody tr"); // Extract the table rows
 
-            const addressCell = row.insertCell();
-            addressCell.textContent = booking.tireShopAddress;
-
-            const timeCell = row.insertCell();
-            timeCell.textContent = formatDateTime(booking.bookingTime); // We'll add this helper
-
-            const vehicleCell = row.insertCell();
-            vehicleCell.textContent = booking.vehicleType;
+        newRows.forEach(row => {
+            tableBody.appendChild(row.cloneNode(true)); // Clone and append rows to result table
         });
     }
+
 
     function formatDateTime(bookingTime) {
         const dateTime = new Date(bookingTime);
