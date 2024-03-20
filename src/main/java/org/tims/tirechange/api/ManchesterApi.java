@@ -14,6 +14,7 @@ import org.tims.tirechange.model.ManchesterTireChangeTime;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
@@ -30,9 +31,16 @@ public class ManchesterApi {
         // 1. Build request URL
         TireShopConfig config = configLoader.loadConfig("src/main/resources/tire_shops.json").get(1); // Assuming Manchester is at index 1
         String endpoint = config.getApi().getEndpoint();
+        // fill in needed range of timeslots depending on time span
+        Integer amountOfNeededTimeSlots;
+        if (from != null || until != null) {
+            amountOfNeededTimeSlots = Period.between(from, until).getDays() * 9;
+        } else {
+            throw new IllegalArgumentException("The dates 'from' and 'until' cannot be null");
+        }
 
         // Construct the request URL with parameters
-        String url = endpoint + "?amount=10&page=0&from=" + from.format(DateTimeFormatter.ISO_DATE);
+        String url = endpoint + "?amount=" + amountOfNeededTimeSlots + "&page=0&from=" + from.format(DateTimeFormatter.ISO_DATE);
         logger.info("url for 'get' created ...");
 
         // 2. Make an HTTP GET request to the Manchester API
