@@ -11,3 +11,11 @@ th, td {
 tr:nth-child(even) {
     background-color: #f2f2f2;
 }
+tr:hover {
+    background-color: #ddd;
+}
+/* Optional: Styling for table headers */
+th {
+    background-color: #dddddd;  /* Example header color */
+    color: black;              /* Example header text color */
+}

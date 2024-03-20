@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <title>Tire Change Booking</title>
@@ -7,19 +8,24 @@
 
 <div class="filters">
   <h3>Filters:</h3>
+  <label for="tireShopDropdown">Tire Shop:</label>
   <select id="tireShopDropdown" multiple>
     <option th:each="shop : ${tireShops}"
             th:value="${shop.name}"
             th:text="${shop.name}">
     </option>
   </select>
-
   <div id="vehicleTypeCheckboxes">
   </div>
 
-  <input type="date" id="startDate">
-  <input type="date" id="endDate">
-  <button id="applyFilters">Apply</button>
+  <div id="datePicker">
+    <label for="startDate">Start Date:</label>
+    <input type="date" id="startDate">
+    <label for="endDate">End Date:</label>
+    <input type="date" id="endDate">
+    <button id="applyFilters">Apply</button>
+  </div>
+
 </div>
 
 <div class="results">
@@ -47,4 +53,5 @@
 <script src="/js/script.js"></script>
 
 </body>
+</html>
 </html>
