@@ -40,12 +40,12 @@ public class MainController {
         }
     }
 
-    @GetMapping("/tire-changes/available/{tireShopName}/{vehicleType}")
-    public List<TireChangeBooking> findAvailableTimes(
-            @RequestParam LocalDate from,
-            @RequestParam LocalDate until,
-            @PathVariable(required = false) String tireShopName,
-            @PathVariable String vehicleType) throws IOException {
-        return tireShopService.findAvailableTimes(from, until, tireShopName, vehicleType);
-    }
+//    @GetMapping("/tire-changes/available/{tireShopName}/{vehicleType}")
+//    public List<TireChangeBooking> findAvailableTimes(
+//            @RequestParam LocalDate from,
+//            @RequestParam LocalDate until,
+//            @PathVariable(required = false) String tireShopName,
+//            @PathVariable String vehicleType) throws IOException {
+//        return tireShopService.findAvailableTimes(from, until, tireShopName, vehicleType);
+//    }
 }

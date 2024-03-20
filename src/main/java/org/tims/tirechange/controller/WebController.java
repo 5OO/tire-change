@@ -30,12 +30,12 @@ public class WebController {
     public List<TireChangeBooking> findAvailableTimes(
             @RequestParam LocalDate from,
             @RequestParam LocalDate until,
-            @RequestParam(required = false) String[] tireShops, // Allow multiple values
-            @RequestParam(required = false) String vehicleType) throws IOException {
+            @RequestParam(required = false) List<String> tireShops, // Allow multiple values
+            @RequestParam(required = false) List<String> vehicleTypes) throws IOException {
         // Parse shops into a comma-separated string if needed
         String tireShopFilter = tireShops != null ? String.join(",", tireShops) : null;
 
-        List<TireChangeBooking> tireChangeBookings = tireShopService.findAvailableTimes(from, until, tireShopFilter, vehicleType);
+        List<TireChangeBooking> tireChangeBookings = tireShopService.findAvailableTimes(from, until, tireShopFilter, vehicleTypes);
         logger.info("Available Bookings: {}", tireChangeBookings);
 
         return tireChangeBookings;
@@ -44,7 +44,7 @@ public class WebController {
     @GetMapping("/tire-changes/view") // Or your relevant mapping
     public String displayAvailableTimes(Model model) throws IOException {
         model.addAttribute("tireShops", configLoader.loadConfig("src/main/resources/tire_shops.json"));
-        List<TireChangeBooking> bookings = tireShopService.findAvailableTimes(LocalDate.now(), LocalDate.now().plusDays(7), null, null);
+        List<TireChangeBooking> bookings = tireShopService.findAvailableTimes(LocalDate.now(), LocalDate.now().plusDays(2), null, null);
         model.addAttribute("bookings", bookings);  // Add the bookings list
         return "index";
     }

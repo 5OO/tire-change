@@ -28,7 +28,7 @@ public class TireShopService {
     private TireShopConfigLoader configLoader;
 
     public List<TireChangeBooking> findAvailableTimes(LocalDate from, LocalDate until,
-                                                      String tireShopName, String vehicleType) throws IOException {
+                                                      String tireShopName, List<String> vehicleTypes) throws IOException {
         List<TireChangeBooking> allResults = new ArrayList<>();
 
         List<TireShopConfig> tireShops = configLoader.loadConfig("src/main/resources/tire_shops.json");

@@ -1,5 +1,5 @@
-const tireShopDropdown = document.getElementById("tireShopDropdown");
 const vehicleTypeCheckboxes = document.getElementById("vehicleTypeCheckboxes");
+// Function to get selected tire shops
 
 tireShopDropdown.addEventListener("change", () => {
     const selectedShopName = tireShopDropdown.value;
@@ -7,6 +7,17 @@ tireShopDropdown.addEventListener("change", () => {
         .then(vehicleTypes => updateVehicleCheckboxes(vehicleTypes));
 });
 
+function getSelectedTireShops() {
+    const tireShopDropdown = document.getElementById("tireShopDropdown");
+    const selectedOptions = [...tireShopDropdown.selectedOptions];
+    return selectedOptions.map(option => option.value);
+}
+
+// Function to get selected vehicle types
+function getSelectedVehicleTypes() {
+    const checkboxes = document.querySelectorAll("#vehicleTypeCheckboxes input[type='checkbox']:checked");
+    return [...checkboxes].map(checkbox => checkbox.value);
+}
 function fetchAvailableVehicleTypes(shopName) {
     return fetch(`/tire-shops/${shopName}/vehicles`)
         .then(response => {
@@ -16,6 +27,7 @@ function fetchAvailableVehicleTypes(shopName) {
             return response.json();
         });
 }
+
 
 function updateVehicleCheckboxes(vehicleTypes) {
     vehicleTypeCheckboxes.innerHTML = ''; // Clear existing checkboxes
@@ -33,3 +45,87 @@ function updateVehicleCheckboxes(vehicleTypes) {
         vehicleTypeCheckboxes.appendChild(label);
     });
 }
+
+const vehicleTypeCheckboxesDiv = document.getElementById("vehicleTypeCheckboxes");
+
+// Assuming tireShops is your config data and each shop has 'vehicleTypes'
+const allVehicleTypes = new Set();
+tireShops.forEach(shop => shop.vehicleTypes.forEach(type => allVehicleTypes.add(type)));
+
+allVehicleTypes.forEach(vehicleType => {
+    const checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+    checkbox.value = vehicleType;
+    checkbox.id = vehicleType; // Add an ID for easier selection
+
+    const label = document.createElement("label");
+    label.htmlFor = vehicleType;
+    label.textContent = vehicleType;
+
+    vehicleTypeCheckboxesDiv.appendChild(checkbox);
+    vehicleTypeCheckboxesDiv.appendChild(label);
+    vehicleTypeCheckboxesDiv.appendChild(document.createElement("br"));
+});
+
+
+// ... (Flatpickr initialization and 'Apply' button logic
+flatpickr("#dateRange", {
+    mode: "range", // Enable range selection mode
+    // ... other Flatpickr configuration options ...
+});
+
+// Apply button logic
+const applyButton = document.getElementById("applyFilters");
+applyButton.addEventListener("click", () => {
+    const dateRange = document.getElementById("dateRange").value;
+    // Split the date range into start and end dates (Example, adjust if needed)
+    const [startDate, endDate] = dateRange.split(" to ");
+    const selectedTireShops = getSelectedTireShops();
+    const selectedVehicleTypes = getSelectedVehicleTypes();
+
+    // Construct query parameters for AJAX
+    const queryParams = new URLSearchParams({
+        from: startDate,
+        until: endDate,
+        tireShops: selectedTireShops.join(","), // Comma-separated if multiple
+        vehicleTypes: selectedVehicleTypes.join(",")
+    }).toString();
+
+    // Send AJAX request to backend with startDate and endDate
+
+    fetch("/tire-changes-available?from=" + startDate + "&until=" + endDate)
+        .then(response => response.json())
+        .then(data => {
+            // Update table display
+            updateTable(data);
+        })
+        .catch(error => console.error("Error fetching data:", error));
+
+    function updateTable(data) {
+        const tableBody = document.getElementById("resultsTable").querySelector("tbody");
+        tableBody.innerHTML = ""; // Clear existing rows
+
+        data.forEach(booking => {
+            const row = tableBody.insertRow();
+
+            const shopCell = row.insertCell();
+            shopCell.textContent = booking.tireShopName;
+
+            const addressCell = row.insertCell();
+            addressCell.textContent = booking.tireShopAddress;
+
+            const timeCell = row.insertCell();
+            timeCell.textContent = formatDateTime(booking.bookingTime); // We'll add this helper
+
+            const vehicleCell = row.insertCell();
+            vehicleCell.textContent = booking.vehicleType;
+        });
+    }
+
+    function formatDateTime(bookingTime) {
+        const dateTime = new Date(bookingTime);
+        const options =  { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' };
+        return dateTime.toLocaleDateString(undefined, options);
+    }
+
+});
