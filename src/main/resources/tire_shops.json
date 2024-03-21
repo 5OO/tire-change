@@ -23,15 +23,26 @@
     }
   },
   {
-    "name": "York",
-    "address": "666 VeryBlurry Rd, York",
+    "name": "honolulu",
+    "address": "234 y New Rd, honolulu",
     "vehicleTypes": [
       "Car",
-      "Truck",
-      "Bike"
+      "Truck"
     ],
     "api": {
-      "endpoint": "http://localhost:9005/api/v2/tire-change-times/",
+      "endpoint": "http://localhost:9004/api/v2/tire-change-times/",
+      "type": "json"
+    }
+  },
+  {
+    "name": "peking",
+    "address": "23232323232 New Rd, peking",
+    "vehicleTypes": [
+      "Car",
+      "Truck"
+    ],
+    "api": {
+      "endpoint": "http://localhost:9004/api/v2/tire-change-times/",
       "type": "json"
     }
   }
