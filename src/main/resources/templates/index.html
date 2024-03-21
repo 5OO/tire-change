@@ -20,11 +20,19 @@
             th:text="${shop.name}">
     </option>
   </select>
-  <div id="vehicleTypeCheckboxes">
+
+  <div id="vehicleTypeDropdownContainer">
+    <label for="vehicleTypeDropdown">Vehicle Type:</label>
+    <select id="vehicleTypeDropdown" multiple>
+      <option th:each="vehicle : ${vehicleType}"
+              th:value="${vehicle.name}"
+              th:text="${vehicle.name}">
+      </option>
+    </select>
   </div>
 
   <div id="datePicker">
-    <label for="dateRange">Select date range:</label>
+    <label for="dateRange">Select date range (from - until):</label>
     <input type="text" id="dateRange">
     <button id="applyFilters">Apply</button>
   </div>
@@ -40,7 +48,9 @@
       <th>Tire Shop</th>
       <th>Address</th>
       <th>Time Slot</th>
-      <th>Vehicle Type </th> </tr>
+      <th>Vehicle Type </th>
+      <th>Create Booking </th>
+    </tr>
     </thead>
     <tbody>
     <tr th:each="booking : ${bookings}">
@@ -48,6 +58,14 @@
       <td th:text="${booking.tireShopAddress}"></td>
       <td th:text="${#temporals.format(booking.bookingTime, 'dd-MMMM-yyyy HH:mm ')}"></td>
       <td th:text="${booking.vehicleType}"></td>
+      <td>
+      <form action="/book-timeslot" method="post">
+        <!-- Use 'booking' object fields for form values -->
+        <input type="hidden" name="universalId" th:value="${booking.universalId}" />
+        <input type="hidden" name="tireShopName" th:value="${booking.tireShopName}" />
+        <button type="submit">Book</button>
+      </form>
+      </td>
     </tr>
     </tbody>
   </table>
