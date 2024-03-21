@@ -27,10 +27,9 @@ public class ManchesterApi {
     private final RestTemplate restTemplate;
     private final TireShopConfigLoader configLoader;
 
-    public List<ManchesterTireChangeTime> getAvailableTimes(LocalDate from, LocalDate until) throws IOException {
+    public List<ManchesterTireChangeTime> getAvailableTimes(LocalDate from, LocalDate until, String endpoint) throws IOException {
         // 1. Build request URL
         TireShopConfig config = configLoader.loadConfig("src/main/resources/tire_shops.json").get(1); // Assuming Manchester is at index 1
-        String endpoint = config.getApi().getEndpoint();
         // fill in needed range of timeslots depending on time span
         Integer amountOfNeededTimeSlots;
         if (from != null || until != null) {

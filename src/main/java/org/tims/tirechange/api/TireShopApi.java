@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface TireShopApi {
     List<TireChangeBooking> getAvailableTimes(LocalDate from,
-                                              LocalDate until) throws IOException;
+                                              LocalDate until, String endpoint) throws IOException;
 
     LondonTireChangeTime bookTimeSlot(String universalId,
                                       String contactInformation) throws IOException;

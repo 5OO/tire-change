@@ -30,10 +30,9 @@ public class LondonApi implements TireShopApi {
     final private RestTemplate restTemplate;
     final private TireShopConfigLoader configLoader;
 
-    public List<TireChangeBooking> getAvailableTimes(LocalDate from, LocalDate until) throws IOException {
+    public List<TireChangeBooking> getAvailableTimes(LocalDate from, LocalDate until, String endpoint) throws IOException {
         // 1. Build the API request URL (use the configuration data)
         TireShopConfig config = configLoader.loadConfig("src/main/resources/tire_shops.json").get(0); // Load and retrieve config
-        String endpoint = config.getApi().getEndpoint();
 
         // Construct the request URL
         String url = endpoint + "available?from=" + from + "&until=" + until;
@@ -51,7 +50,7 @@ public class LondonApi implements TireShopApi {
         // Map to TireChangeBooking
         List<LondonTireChangeTime> availableTimes = response.getAvailableTimes();
 
-        if (availableTimes == null) {
+        if (availableTimes == null || availableTimes.isEmpty()) {
             String errorMessage = String.format("No available timeslots found for the given date range between %s and %s.", from.toString(), until.toString());
             throw new NoAvailableTimeslotsException(errorMessage);
         } else {
