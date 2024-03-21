@@ -11,6 +11,12 @@
 </head>
 <body>
 
+<!-- Flash Messages Section -->
+<div class="flash-messages">
+  <p th:if="${successMessage}" th:text="${successMessage}" class="success"></p>
+  <p th:if="${errorMessage}" th:text="${errorMessage}" class="error"></p>
+</div>
+
 <div class="filters">
   <h3>Filters:</h3>
   <label for="tireShopDropdown">Tire Shop:</label>
@@ -63,6 +69,8 @@
         <!-- Use 'booking' object fields for form values -->
         <input type="hidden" name="universalId" th:value="${booking.universalId}" />
         <input type="hidden" name="tireShopName" th:value="${booking.tireShopName}" />
+        <!-- hidden field for contactInformation with a constant value -->
+        <input type="hidden" name="contactInformation" value="defaultContactInfo@example.com" />
         <button type="submit">Book</button>
       </form>
       </td>

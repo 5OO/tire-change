@@ -7,7 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.tims.tirechange.api.TireShopService;
 import org.tims.tirechange.configuration.TireShopConfigLoader;
 import org.tims.tirechange.model.TireChangeBooking;
@@ -54,5 +56,21 @@ public class WebController {
         List<TireChangeBooking> bookings = tireShopService.findAvailableTimes(LocalDate.now(), LocalDate.now().plusDays(2), null, null);
         model.addAttribute("bookings", bookings);  // Add the bookings list
         return "index";
+    }
+
+    @PostMapping("/book-timeslot")
+    public String bookTimeslot(@RequestParam String universalId,
+                               @RequestParam String tireShopName,
+                               @RequestParam String contactInformation,
+                               RedirectAttributes redirectAttributes) {
+        // Logic to call the appropriate booking API based on tireShopName
+        try {
+            tireShopService.bookTimeslot(universalId, tireShopName, contactInformation);
+            redirectAttributes.addFlashAttribute("successMessage", "Booking successful!");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Booking failed: " + e.getMessage());
+        }
+
+        return "redirect:/tire-changes/view";
     }
 }

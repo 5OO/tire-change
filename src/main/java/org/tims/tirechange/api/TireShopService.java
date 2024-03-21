@@ -79,4 +79,21 @@ public class TireShopService {
         booking.setApiIdentifier("Manchester");
         return booking;
     }
+
+    public void bookTimeslot(String universalId, String tireShopName, String contactInformation) throws IOException {
+        List<TireShopConfig> tireShops = configLoader.loadConfig("src/main/resources/tire_shops.json");
+
+        TireShopConfig shopConfig = tireShops.stream()
+                .filter(shop -> shop.getName().equalsIgnoreCase(tireShopName))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("Tire Shop not found"));
+
+        if ("xml".equals(shopConfig.getApi().getType())) {
+            londonApi.bookTimeSlot(universalId, contactInformation);
+        } else if ("json".equals(shopConfig.getApi().getType())) {
+            manchesterApi.bookTimeSlot(universalId, contactInformation);
+        } else {
+            throw new UnsupportedOperationException("Unsupported API type");
+        }
+    }
 }
