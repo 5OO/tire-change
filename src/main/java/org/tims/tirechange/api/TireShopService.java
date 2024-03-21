@@ -37,16 +37,20 @@ public class TireShopService {
 
         for (TireShopConfig shop : tireShops) {
             if (tireShopName == null || shop.getName().equalsIgnoreCase(tireShopName)) {
+                String endpoint = shop.getApi().getEndpoint();
                 if (shop.getApi().getType().equals("xml")) {
                     logger.info("type is XML...");
-
-                    allResults.addAll(londonApi.getAvailableTimes(from, until));
+                    allResults.addAll(londonApi.getAvailableTimes(from, until, endpoint));
                 } else if (shop.getApi().getType().equals("json")) {
                     logger.info("type is json...");
 
-                    allResults.addAll(manchesterApi.getAvailableTimes(from, until)
+                    allResults.addAll(manchesterApi.getAvailableTimes(from, until, endpoint)
                             .stream()
+                            // Filter out any timeslots where 'available' is false
+                            .filter(ManchesterTireChangeTime::isAvailable)
+                            // Map each ManchesterTireChangeTime object to a TireChangeBooking object
                             .map(manchesterTime -> mapManchesterToTireChangeBooking(manchesterTime, shop))
+                            // Collect the results back into a List
                             .collect(Collectors.toList()));
                 }
             }
