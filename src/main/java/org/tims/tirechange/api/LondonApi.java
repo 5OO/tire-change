@@ -85,7 +85,7 @@ public class LondonApi implements TireShopApi {
 
         ResponseEntity<String> response = restTemplate.exchange(bookingEndpoint, HttpMethod.PUT, entity, String.class);
 
-        logger.info(" PUT execution done ... ");
+        logger.info("London API XML PUT execution done ... ");
 
         // 4. Handle Response
         if (response.getStatusCode() == HttpStatus.OK) {

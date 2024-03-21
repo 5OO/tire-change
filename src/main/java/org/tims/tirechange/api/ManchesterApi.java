@@ -70,7 +70,7 @@ public class ManchesterApi {
         HttpEntity<String> entity = new HttpEntity<>(requestBody, headers);
 
         ResponseEntity<String> response = restTemplate.exchange(bookingUrl, HttpMethod.PUT, entity, String.class);
-        logger.info(" PUT execution done ... ");
+        logger.info(" Manchester JSON - PUT execution done ... ");
 
         // 4. Handle Response
         if (response.getStatusCode() == HttpStatus.OK) {
