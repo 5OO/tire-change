@@ -59,7 +59,9 @@ public class ManchesterApi {
         // 1. Build the API request URL
         TireShopConfig config = configLoader.loadConfig("src/main/resources/tire_shops.json").get(1);
         String endpoint = config.getApi().getEndpoint();
-        String bookingUrl = endpoint + "/" + universalId + "/booking";
+        String bookingUrl = endpoint + universalId + "/booking";
+
+        logger.info("1 - final booking URL: {}", bookingUrl);
 
         // 2. Prepare JSON request body
         String requestBody = createBookingRequestJSON(contactInformation);
@@ -69,7 +71,7 @@ public class ManchesterApi {
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<String> entity = new HttpEntity<>(requestBody, headers);
 
-        ResponseEntity<String> response = restTemplate.exchange(bookingUrl, HttpMethod.PUT, entity, String.class);
+        ResponseEntity<String> response = restTemplate.exchange(bookingUrl, HttpMethod.POST, entity, String.class);
         logger.info(" Manchester JSON - PUT execution done ... ");
 
         // 4. Handle Response
@@ -77,6 +79,7 @@ public class ManchesterApi {
             logger.info(" status code is 200 OK, preparing for parsing ");
             // Parse response JSON into ManchesterTireChangeTime
             ObjectMapper mapper = new ObjectMapper();
+            mapper.registerModule(new JavaTimeModule()); // enable Java 8 time support
             return mapper.readValue(response.getBody(), ManchesterTireChangeTime.class);
         } else {
             logger.info("PUT failed, throwing an error message ");
