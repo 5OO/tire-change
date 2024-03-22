@@ -23,34 +23,35 @@
   </ul>
 </div>
 
-<div class="filters">
-  <h3>Filters:</h3>
-  <label for="tireShopDropdown">Tire Shop:</label>
-  <select id="tireShopDropdown" multiple>
-    <option th:each="shop : ${tireShops}"
-            th:value="${shop.name}"
-            th:text="${shop.name}">
-    </option>
-  </select>
+<!-- Filters Section -->
 
-  <div id="vehicleTypeDropdownContainer">
-    <label for="vehicleTypeDropdown">Vehicle Type:</label>
-    <select id="vehicleTypeDropdown" multiple>
-      <option th:each="vehicle : ${vehicleType}"
-              th:value="${vehicle.name}"
-              th:text="${vehicle.name}">
-      </option>
+<form action="/tire-changes/view" method="get">
+  <div class="filters">
+    <h3>Filters:</h3>
+    <!-- Tire Shop Dropdown -->
+    <label for="tireShop">Tire Shop:</label>
+    <select id="tireShop" name="tireShop" multiple>
+      <option th:each="shop : ${tireShops}" th:value="${shop.name}" th:text="${shop.name}"></option>
     </select>
+
+    <!-- Vehicle Type Dropdown -->
+    <div id="vehicleTypeDropdownContainer">
+      <label for="vehicleType">Vehicle Type:</label>
+      <select id="vehicleType" name="vehicleType" multiple>
+        <option th:each="vehicleType : ${vehicleTypes}" th:value="${vehicleType}" th:text="${vehicleType}"></option>
+      </select>
+    </div>
+
+    <!-- Date Range Picker -->
+    <div id="datePicker">
+      <label for="dateRange">Select date range:</label>
+      <input type="text" id="dateRange" name="dateRange">
+    </div>
+
+    <button type="submit" id="applyFilters">Apply</button>
   </div>
+</form>
 
-  <div id="datePicker">
-    <label for="dateRange">Select date range (from - until):</label>
-    <input type="text" id="dateRange">
-    <button id="applyFilters">Apply</button>
-  </div>
-
-
-</div>
 
 <div class="results">
   <h3>Available Time Slots:</h3>

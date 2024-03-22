@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,7 +14,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.tims.tirechange.api.TimeslotFetchResult;
 import org.tims.tirechange.api.TireShopService;
 import org.tims.tirechange.configuration.TireShopConfigLoader;
-import org.tims.tirechange.model.TireChangeBooking;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -37,13 +37,12 @@ public class WebController {
             @RequestParam(required = false) List<String> tireShops, // Allow multiple values
             @RequestParam(required = false) List<String> vehicleTypes) throws IOException {
         // Parse shops into a comma-separated string if needed
-        String tireShopFilter = tireShops != null ? String.join(",", tireShops) : null;
         logger.info("web-controller - tire-changes-available -> from {}", from);
         logger.info("tire-changes-available -> until {}", until);
-        logger.info("tire shop filter {}", tireShopFilter);
+        logger.info("tire shop filter {}", tireShops);
         logger.info("vehicle types {}", vehicleTypes);
 
-        TimeslotFetchResult fetchResult = tireShopService.findAvailableTimes(from, until, tireShopFilter, vehicleTypes);
+        TimeslotFetchResult fetchResult = tireShopService.findAvailableTimes(from, until, tireShops, vehicleTypes);
 
         logger.info("Available Bookings: {}", fetchResult.getAvailableTimeslots());
 
@@ -54,9 +53,20 @@ public class WebController {
     }
 
     @GetMapping("/tire-changes/view") // Or your relevant mapping
-    public String displayAvailableTimes(Model model) throws IOException {
+    public String displayAvailableTimes(Model model,
+                                        @RequestParam(required = false) List<String> tireShop,
+                                        @RequestParam(required = false) List<String> vehicleType,
+                                        @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate fromDate,
+                                        @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate untilDate) throws IOException {
         model.addAttribute("tireShops", configLoader.loadConfig("src/main/resources/tire_shops.json"));
-        TimeslotFetchResult tireShopServiceAvailableTimes= tireShopService.findAvailableTimes(LocalDate.now(), LocalDate.now().plusDays(2), null, null);
+
+        // Determine the date range for filtering
+        LocalDate from = (fromDate != null) ? fromDate : LocalDate.now();
+        LocalDate until = (untilDate != null) ? untilDate : LocalDate.now().plusDays(2);
+
+        // Perform the filtering based on the provided parameters
+        TimeslotFetchResult tireShopServiceAvailableTimes = tireShopService.findAvailableTimes(from, until, tireShop, vehicleType);
+
         model.addAttribute("bookings", tireShopServiceAvailableTimes.getAvailableTimeslots());  // Add the bookings list
         model.addAttribute("warnings", tireShopServiceAvailableTimes.getWarnings()); // Add warnings to the model
         return "index";

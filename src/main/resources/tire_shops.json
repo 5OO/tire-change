@@ -23,7 +23,7 @@
     }
   },
   {
-    "name": "honolulu",
+    "name": "Honolulu",
     "address": "234 y New Rd, honolulu",
     "vehicleTypes": [
       "Car",
@@ -35,11 +35,24 @@
     }
   },
   {
-    "name": "peking",
-    "address": "23232323232 New Rd, peking",
+    "name": "Medusa",
+    "address": "234 y New Rd, honolulu",
     "vehicleTypes": [
-      "Car",
-      "Truck"
+      "Van",
+      "Truck",
+      "Tractor"
+    ],
+    "api": {
+      "endpoint": "http://localhost:9004/api/v2/tire-change-times/",
+      "type": "json"
+    }
+  },
+  {
+    "name": "Analeptical",
+    "address": "234 y New Rd, honolulu",
+    "vehicleTypes": [
+      "Truck",
+      "Bike"
     ],
     "api": {
       "endpoint": "http://localhost:9004/api/v2/tire-change-times/",

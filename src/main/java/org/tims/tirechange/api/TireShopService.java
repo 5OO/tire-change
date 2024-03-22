@@ -29,7 +29,7 @@ public class TireShopService {
     private TireShopConfigLoader configLoader;
 
     public TimeslotFetchResult findAvailableTimes(LocalDate from, LocalDate until,
-                                                      String tireShopName, List<String> vehicleTypes) throws IOException {
+                                                      List<String> tireShopName, List<String> vehicleTypes) throws IOException {
         List<TireChangeBooking> allResults = new ArrayList<>();
         List<String> warnings = new ArrayList<>();
         List<TireShopConfig> tireShops = configLoader.loadConfig("src/main/resources/tire_shops.json");
@@ -37,7 +37,7 @@ public class TireShopService {
         logger.info("shops configurations loaded from JSON file...");
 
         for (TireShopConfig shop : tireShops) {
-            if (tireShopName == null || shop.getName().equalsIgnoreCase(tireShopName)) {
+            if (tireShopName == null || tireShopName.isEmpty() || tireShopName.contains(shop.getName())) {
                 String endpoint = shop.getApi().getEndpoint();
                 try {
                     if (shop.getApi().getType().equals("xml")) {
@@ -99,8 +99,6 @@ public class TireShopService {
 
             logger.info("tireShopService - bookTimeslot initiated for xml endpoint ...");
         } else if ("json".equals(shopConfig.getApi().getType())) {
-//            logger.info("Booking URL: {}", bookingUrl);
-//            logger.info("Request Body: {}", requestBody);
             manchesterApi.bookTimeSlot(universalId, contactInformation);
 
             logger.info("tireShopService - bookTimeslot initiated for json endpoint ...");
