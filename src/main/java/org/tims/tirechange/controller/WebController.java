@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.tims.tirechange.api.TimeslotFetchResult;
 import org.tims.tirechange.api.TireShopService;
 import org.tims.tirechange.configuration.TireShopConfigLoader;
 import org.tims.tirechange.model.TireChangeBooking;
@@ -42,10 +43,12 @@ public class WebController {
         logger.info("tire shop filter {}", tireShopFilter);
         logger.info("vehicle types {}", vehicleTypes);
 
-        List<TireChangeBooking> tireChangeBookings = tireShopService.findAvailableTimes(from, until, tireShopFilter, vehicleTypes);
-        logger.info("Available Bookings: {}", tireChangeBookings);
+        TimeslotFetchResult fetchResult = tireShopService.findAvailableTimes(from, until, tireShopFilter, vehicleTypes);
 
-        model.addAttribute("tireChangeBookings", tireChangeBookings); // Add data to Model
+        logger.info("Available Bookings: {}", fetchResult.getAvailableTimeslots());
+
+        model.addAttribute("tireChangeBookings", fetchResult.getAvailableTimeslots()); // Add data to Model
+        model.addAttribute("warnings", fetchResult.getWarnings()); // Add warnings to the model
 
         return "tire-changes-available"; // Return template name
     }
@@ -53,8 +56,9 @@ public class WebController {
     @GetMapping("/tire-changes/view") // Or your relevant mapping
     public String displayAvailableTimes(Model model) throws IOException {
         model.addAttribute("tireShops", configLoader.loadConfig("src/main/resources/tire_shops.json"));
-        List<TireChangeBooking> bookings = tireShopService.findAvailableTimes(LocalDate.now(), LocalDate.now().plusDays(2), null, null);
-        model.addAttribute("bookings", bookings);  // Add the bookings list
+        TimeslotFetchResult tireShopServiceAvailableTimes= tireShopService.findAvailableTimes(LocalDate.now(), LocalDate.now().plusDays(2), null, null);
+        model.addAttribute("bookings", tireShopServiceAvailableTimes.getAvailableTimeslots());  // Add the bookings list
+        model.addAttribute("warnings", tireShopServiceAvailableTimes.getWarnings()); // Add warnings to the model
         return "index";
     }
 
