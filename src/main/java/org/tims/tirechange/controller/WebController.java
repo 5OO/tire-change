@@ -32,29 +32,6 @@ public class WebController {
     @Autowired
     private TireShopService tireShopService;
 
-    @GetMapping("/tire-changes-available")
-    public String findAvailableTimes(
-            Model model,
-            @RequestParam LocalDate from,
-            @RequestParam LocalDate until,
-            @RequestParam(required = false) List<String> tireShops, // Allow multiple values
-            @RequestParam(required = false) List<String> vehicleTypes) throws IOException {
-        // Parse shops into a comma-separated string if needed
-        logger.info("web-controller - tire-changes-available -> from {}", from);
-        logger.info("tire-changes-available -> until {}", until);
-        logger.info("tire shop filter {}", tireShops);
-        logger.info("vehicle types {}", vehicleTypes);
-
-        TimeslotFetchResult fetchResult = tireShopService.findAvailableTimes(from, until, tireShops, vehicleTypes);
-
-        logger.info("Available Bookings: {}", fetchResult.getAvailableTimeslots());
-
-        model.addAttribute("tireChangeBookings", fetchResult.getAvailableTimeslots()); // Add data to Model
-        model.addAttribute("warnings", fetchResult.getWarnings()); // Add warnings to the model
-
-        return "tire-changes-available"; // Return template name
-    }
-
     @GetMapping("/tire-changes/view") // Or your relevant mapping
     public String displayAvailableTimes(Model model,
                                         @RequestParam(required = false) List<String> tireShop,
