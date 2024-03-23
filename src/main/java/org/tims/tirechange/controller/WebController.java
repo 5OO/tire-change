@@ -17,7 +17,10 @@ import org.tims.tirechange.configuration.TireShopConfigLoader;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Controller
 @RequiredArgsConstructor
@@ -58,8 +61,14 @@ public class WebController {
                                         @RequestParam(required = false) List<String> vehicleType,
                                         @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate fromDate,
                                         @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate untilDate) throws IOException {
+        var tireShops = configLoader.loadConfig("src/main/resources/tire_shops.json");
         model.addAttribute("tireShops", configLoader.loadConfig("src/main/resources/tire_shops.json"));
 
+        // Extract and add distinct vehicle types
+        Set<String> allVehicleTypes = tireShops.stream()
+                .flatMap(shop -> Arrays.stream(shop.getVehicleTypes()))
+                .collect(Collectors.toSet());
+        model.addAttribute("vehicleTypes", allVehicleTypes);
         // Determine the date range for filtering
         LocalDate from = (fromDate != null) ? fromDate : LocalDate.now();
         LocalDate until = (untilDate != null) ? untilDate : LocalDate.now().plusDays(2);
