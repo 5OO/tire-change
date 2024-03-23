@@ -19,27 +19,49 @@ th {
     background-color: #dddddd;  /* Example header color */
     color: black;              /* Example header text color */
 }
-
-/* Success message styling */
-.success {
-    color: #3c763d; /* Green text color for success */
-    background-color: #dff0d8; /* Light green background */
-    border-color: #d6e9c6; /* Greenish border */
-    padding: 10px;
-    margin-bottom: 20px;
-    border: 1px solid transparent;
-    border-radius: 4px;
-    text-align: center;
+.btn-primary {
+    background-color: #a94442; /* Darker shade of red */
+    border-color: #a94442;
 }
 
-/* Error message styling */
-.error {
-    color: #a94442; /* Red text color for errors */
-    background-color: #f2dede; /* Light red background */
-    border-color: #ebccd1; /* Reddish border */
-    padding: 10px;
-    margin-bottom: 20px;
-    border: 1px solid transparent;
+/* Hover effect for buttons for better user interaction */
+.btn-primary:hover {
+    background-color: #8a3c35; /* A bit darker on hover */
+    border-color: #8a3c35;
+}
+
+/* Adjusting success and error messages to fit the red accent */
+.success, .error {
     border-radius: 4px;
     text-align: center;
+    padding: 10px;
+    margin-bottom: 0px;
+}
+
+.success {
+    color: #155724; /* Dark green for contrast */
+    background-color: #d4edda;
+    border-color: #c3e6cb;
+}
+
+.error {
+    color: #a94442; /* Keeping it consistent with red accent */
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+}
+
+/* Optional: Enhancements for warnings */
+.warnings ul {
+    list-style: none;
+    padding-left: 0;
+}
+
+.warnings li {
+    background-color: #fff3cd;
+    color: #856404;
+    border-color: #ffeeba;
+    padding: 5px;
+    border-radius: 4px;
+    text-align: center;
+
 }

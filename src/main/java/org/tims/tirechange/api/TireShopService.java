@@ -55,6 +55,11 @@ public class TireShopService {
                                 .map(manchesterTime -> mapManchesterToTireChangeBooking(manchesterTime, shop))
                                 // Collect the results back into a List
                                 .collect(Collectors.toList()));
+                        if (allResults.size() == 0) {
+                            // No new timeslots were added for this shop, indicating no availability
+                            logger.info("No available timeslots found for {}", shop.getName());
+                            warnings.add("No available timeslots found for " + shop.getName() + ".");
+                        }
                     }
                 } catch (NoAvailableTimeslotsException e) {
                     logger.info("e.m {} via {}: {}", shop.getName(), shop.getApi().getType(), e.getMessage());
