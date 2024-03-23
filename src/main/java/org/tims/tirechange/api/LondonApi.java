@@ -60,7 +60,9 @@ public class LondonApi implements TireShopApi {
                         availableTime.setUniversalId(time.getUuid());
                         availableTime.setBookingTime(java.time.OffsetDateTime.parse(time.getTime()).toLocalDateTime());
                         availableTime.setAvailable(true);
-                        availableTime.setVehicleType(Arrays.toString(config.getVehicleTypes()));
+                        // Adjusting vehicleType [ ] here
+                        String joinedVehicleTypes = String.join(", ", config.getVehicleTypes());
+                        availableTime.setVehicleType(joinedVehicleTypes);
                         availableTime.setTireShopName(config.getName());
                         availableTime.setTireShopAddress(config.getAddress());
                         return availableTime;

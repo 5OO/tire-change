@@ -81,7 +81,10 @@ public class TireShopService {
         booking.setAvailable(manchesterTime.isAvailable());
         booking.setTireShopName(currentShopConfig.getName());
         booking.setTireShopAddress(currentShopConfig.getAddress());
-        booking.setVehicleType(Arrays.toString(currentShopConfig.getVehicleTypes()));
+        // Adjusting vehicleType [ ] here
+        String joinedVehicleTypes = String.join(", ", currentShopConfig.getVehicleTypes());
+        booking.setVehicleType(joinedVehicleTypes);
+//        booking.setVehicleType(Arrays.toString(currentShopConfig.getVehicleTypes()));
         booking.setApiIdentifier("Manchester");
         return booking;
     }
