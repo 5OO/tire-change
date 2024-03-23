@@ -51,7 +51,6 @@
     "name": "Analeptical",
     "address": "234 y New Rd, honolulu",
     "vehicleTypes": [
-      "Truck",
       "Bike"
     ],
     "api": {

@@ -1,4 +1,13 @@
 // Flatpickr initialization for date selection
-flatpickr("#dateRange", {
-    mode: "range", // Enable range selection mode
+flatpickr("#fromDate", {
+    altInput: true,
+    altFormat: "j-F-Y",
+    dateFormat: "Y-m-d",
 });
+
+flatpickr("#untilDate", {
+    altInput: true,
+    altFormat: "j-F-Y",
+    dateFormat: "Y-m-d",
+});
+
