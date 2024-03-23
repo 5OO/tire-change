@@ -65,7 +65,10 @@ public class TireShopService {
         // Filter aggregated results based on vehicleType
         if (vehicleTypes != null && !vehicleTypes.isEmpty()) {
             allResults = allResults.stream()
-                    .filter(booking -> vehicleTypes.contains(booking.getVehicleType()))
+                    .filter(booking -> {
+                        List<String> bookingVehicleTypes = Arrays.asList(booking.getVehicleType().split(",\\s*"));
+                        return bookingVehicleTypes.stream().anyMatch(vehicleTypes::contains);
+                    })
                     .collect(Collectors.toList());
         }
 
