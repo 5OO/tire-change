@@ -36,7 +36,7 @@ public class LondonApi implements TireShopApi {
 
         // Construct the request URL
         String url = endpoint + "available?from=" + from + "&until=" + until;
-        logger.info("url for 'get' created ...");
+        logger.info("url {} for 'get' created ...", url);
 
         // 2. Make an HTTP GET request to the London API
         String xmlResponse = restTemplate.getForObject(url, String.class);

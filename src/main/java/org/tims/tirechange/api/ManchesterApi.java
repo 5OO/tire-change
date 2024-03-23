@@ -40,7 +40,7 @@ public class ManchesterApi {
 
         // Construct the request URL with parameters
         String url = endpoint + "?amount=" + amountOfNeededTimeSlots + "&page=0&from=" + from.format(DateTimeFormatter.ISO_DATE);
-        logger.info("url for 'get' created ...");
+        logger.info("{} url for 'get' created ...", url);
 
         // 2. Make an HTTP GET request to the Manchester API
         ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);

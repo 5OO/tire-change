@@ -56,7 +56,7 @@ public class TireShopService {
                                 .collect(Collectors.toList()));
                     }
                 } catch (NoAvailableTimeslotsException e) {
-                    logger.info("No available timeslots found for {} using {}: {}", shop.getName(), shop.getApi().getType(), e.getMessage());
+                    logger.info("e.m {} via {}: {}", shop.getName(), shop.getApi().getType(), e.getMessage());
                     warnings.add("No available timeslots found for " + shop.getName());
                 }
             }
