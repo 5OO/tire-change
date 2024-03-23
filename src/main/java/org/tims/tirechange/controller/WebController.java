@@ -37,7 +37,20 @@ public class WebController {
                                         @RequestParam(required = false) List<String> tireShop,
                                         @RequestParam(required = false) List<String> vehicleType,
                                         @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate fromDate,
-                                        @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate untilDate) throws IOException {
+                                        @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate untilDate,
+                                        RedirectAttributes redirectAttributes) throws IOException {
+
+        // Default to today and two days ahead if dates are not provided
+        LocalDate from = (fromDate != null) ? fromDate : LocalDate.now();
+        LocalDate until = (untilDate != null) ? untilDate : LocalDate.now().plusDays(2);
+
+        // Check if 'from' date is after 'until' date
+        if (from.isAfter(until)) {
+            // Redirect back to the form with an error message
+            redirectAttributes.addFlashAttribute("errorMessage", "The start date must be before the end date.");
+            return "redirect:/tire-changes/view";
+        }
+        // Proceed with fetching and displaying the available times
         var tireShops = configLoader.loadConfig("src/main/resources/tire_shops.json");
         model.addAttribute("tireShops", configLoader.loadConfig("src/main/resources/tire_shops.json"));
 
@@ -46,9 +59,6 @@ public class WebController {
                 .flatMap(shop -> Arrays.stream(shop.getVehicleTypes()))
                 .collect(Collectors.toSet());
         model.addAttribute("vehicleTypes", allVehicleTypes);
-        // Determine the date range for filtering
-        LocalDate from = (fromDate != null) ? fromDate : LocalDate.now();
-        LocalDate until = (untilDate != null) ? untilDate : LocalDate.now().plusDays(2);
 
         // Perform the filtering based on the provided parameters
         TimeslotFetchResult tireShopServiceAvailableTimes = tireShopService.findAvailableTimes(from, until, tireShop, vehicleType);
