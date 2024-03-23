@@ -30,14 +30,13 @@ public class LondonApi implements TireShopApi {
     final private RestTemplate restTemplate;
     final private TireShopConfigLoader configLoader;
 
-    public List<TireChangeBooking> getAvailableTimes(LocalDate from, LocalDate until) throws IOException {
+    public List<TireChangeBooking> getAvailableTimes(LocalDate from, LocalDate until, String endpoint) throws IOException {
         // 1. Build the API request URL (use the configuration data)
         TireShopConfig config = configLoader.loadConfig("src/main/resources/tire_shops.json").get(0); // Load and retrieve config
-        String endpoint = config.getApi().getEndpoint();
 
         // Construct the request URL
         String url = endpoint + "available?from=" + from + "&until=" + until;
-        logger.info("url for 'get' created ...");
+        logger.info("url {} for 'get' created ...", url);
 
         // 2. Make an HTTP GET request to the London API
         String xmlResponse = restTemplate.getForObject(url, String.class);
@@ -51,7 +50,7 @@ public class LondonApi implements TireShopApi {
         // Map to TireChangeBooking
         List<LondonTireChangeTime> availableTimes = response.getAvailableTimes();
 
-        if (availableTimes == null) {
+        if (availableTimes == null || availableTimes.isEmpty()) {
             String errorMessage = String.format("No available timeslots found for the given date range between %s and %s.", from.toString(), until.toString());
             throw new NoAvailableTimeslotsException(errorMessage);
         } else {
@@ -61,7 +60,9 @@ public class LondonApi implements TireShopApi {
                         availableTime.setUniversalId(time.getUuid());
                         availableTime.setBookingTime(java.time.OffsetDateTime.parse(time.getTime()).toLocalDateTime());
                         availableTime.setAvailable(true);
-                        availableTime.setVehicleType(Arrays.toString(config.getVehicleTypes()));
+                        // Adjusting vehicleType [ ] here
+                        String joinedVehicleTypes = String.join(", ", config.getVehicleTypes());
+                        availableTime.setVehicleType(joinedVehicleTypes);
                         availableTime.setTireShopName(config.getName());
                         availableTime.setTireShopAddress(config.getAddress());
                         return availableTime;
@@ -86,7 +87,7 @@ public class LondonApi implements TireShopApi {
 
         ResponseEntity<String> response = restTemplate.exchange(bookingEndpoint, HttpMethod.PUT, entity, String.class);
 
-        logger.info(" PUT execution done ... ");
+        logger.info("London API XML PUT execution done ... ");
 
         // 4. Handle Response
         if (response.getStatusCode() == HttpStatus.OK) {

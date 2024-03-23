@@ -21,12 +21,12 @@ public class MainController {
     @Autowired
     private TireShopService tireShopService;
 
-    @GetMapping("/tire-changes/available")
-    public List<TireChangeBooking> getAvailableTimes(
-            @RequestParam LocalDate from,
-            @RequestParam LocalDate until) throws IOException {
-        return londonApi.getAvailableTimes(from, until);
-    }
+//    @GetMapping("/tire-changes/available")
+//    public List<TireChangeBooking> getAvailableTimes(
+//            @RequestParam LocalDate from,
+//            @RequestParam LocalDate until) throws IOException {
+//        return londonApi.getAvailableTimes(from, until);
+//    }
 
     @PutMapping("/tire-changes/{universalID}/booking")
     public ResponseEntity<LondonTireChangeTime> bookTimeSlot(@PathVariable String universalID,

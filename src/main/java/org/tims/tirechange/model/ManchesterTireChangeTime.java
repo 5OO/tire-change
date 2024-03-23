@@ -1,5 +1,6 @@
 package org.tims.tirechange.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,6 +15,7 @@ public class ManchesterTireChangeTime {
     private Integer id;
 
     @JsonProperty("time")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'")
     private LocalDateTime bookingTime;
 
     @JsonProperty("available")

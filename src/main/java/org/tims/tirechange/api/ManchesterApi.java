@@ -27,10 +27,9 @@ public class ManchesterApi {
     private final RestTemplate restTemplate;
     private final TireShopConfigLoader configLoader;
 
-    public List<ManchesterTireChangeTime> getAvailableTimes(LocalDate from, LocalDate until) throws IOException {
+    public List<ManchesterTireChangeTime> getAvailableTimes(LocalDate from, LocalDate until, String endpoint) throws IOException {
         // 1. Build request URL
         TireShopConfig config = configLoader.loadConfig("src/main/resources/tire_shops.json").get(1); // Assuming Manchester is at index 1
-        String endpoint = config.getApi().getEndpoint();
         // fill in needed range of timeslots depending on time span
         Integer amountOfNeededTimeSlots;
         if (from != null || until != null) {
@@ -41,7 +40,7 @@ public class ManchesterApi {
 
         // Construct the request URL with parameters
         String url = endpoint + "?amount=" + amountOfNeededTimeSlots + "&page=0&from=" + from.format(DateTimeFormatter.ISO_DATE);
-        logger.info("url for 'get' created ...");
+        logger.info("{} url for 'get' created ...", url);
 
         // 2. Make an HTTP GET request to the Manchester API
         ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
@@ -60,7 +59,9 @@ public class ManchesterApi {
         // 1. Build the API request URL
         TireShopConfig config = configLoader.loadConfig("src/main/resources/tire_shops.json").get(1);
         String endpoint = config.getApi().getEndpoint();
-        String bookingUrl = endpoint + "/" + universalId + "/booking";
+        String bookingUrl = endpoint + universalId + "/booking";
+
+        logger.info("1 - final booking URL: {}", bookingUrl);
 
         // 2. Prepare JSON request body
         String requestBody = createBookingRequestJSON(contactInformation);
@@ -70,14 +71,15 @@ public class ManchesterApi {
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<String> entity = new HttpEntity<>(requestBody, headers);
 
-        ResponseEntity<String> response = restTemplate.exchange(bookingUrl, HttpMethod.PUT, entity, String.class);
-        logger.info(" PUT execution done ... ");
+        ResponseEntity<String> response = restTemplate.exchange(bookingUrl, HttpMethod.POST, entity, String.class);
+        logger.info(" Manchester JSON - PUT execution done ... ");
 
         // 4. Handle Response
         if (response.getStatusCode() == HttpStatus.OK) {
             logger.info(" status code is 200 OK, preparing for parsing ");
             // Parse response JSON into ManchesterTireChangeTime
             ObjectMapper mapper = new ObjectMapper();
+            mapper.registerModule(new JavaTimeModule()); // enable Java 8 time support
             return mapper.readValue(response.getBody(), ManchesterTireChangeTime.class);
         } else {
             logger.info("PUT failed, throwing an error message ");

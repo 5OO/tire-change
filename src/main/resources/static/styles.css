@@ -19,3 +19,27 @@ th {
     background-color: #dddddd;  /* Example header color */
     color: black;              /* Example header text color */
 }
+
+/* Success message styling */
+.success {
+    color: #3c763d; /* Green text color for success */
+    background-color: #dff0d8; /* Light green background */
+    border-color: #d6e9c6; /* Greenish border */
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    text-align: center;
+}
+
+/* Error message styling */
+.error {
+    color: #a94442; /* Red text color for errors */
+    background-color: #f2dede; /* Light red background */
+    border-color: #ebccd1; /* Reddish border */
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    text-align: center;
+}

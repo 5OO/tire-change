@@ -23,15 +23,38 @@
     }
   },
   {
-    "name": "York",
-    "address": "666 VeryBlurry Rd, York",
+    "name": "Honolulu",
+    "address": "234 y New Rd, honolulu",
     "vehicleTypes": [
       "Car",
+      "Truck"
+    ],
+    "api": {
+      "endpoint": "http://localhost:9004/api/v2/tire-change-times/",
+      "type": "json"
+    }
+  },
+  {
+    "name": "Medusa",
+    "address": "234 y New Rd, honolulu",
+    "vehicleTypes": [
+      "Van",
       "Truck",
+      "Tractor"
+    ],
+    "api": {
+      "endpoint": "http://localhost:9004/api/v2/tire-change-times/",
+      "type": "json"
+    }
+  },
+  {
+    "name": "Analeptical",
+    "address": "234 y New Rd, honolulu",
+    "vehicleTypes": [
       "Bike"
     ],
     "api": {
-      "endpoint": "http://localhost:9005/api/v2/tire-change-times/",
+      "endpoint": "http://localhost:9004/api/v2/tire-change-times/",
       "type": "json"
     }
   }
