@@ -72,9 +72,10 @@ class LondonApiTest {
 
         LocalDate fromDate = LocalDate.now();
         LocalDate untilDate = LocalDate.now().plusDays(1);
+        String endpoint = testConfig.getApi().getEndpoint();
 
         // Act
-        List<TireChangeBooking> result = londonApi.getAvailableTimes(fromDate, untilDate);
+        List<TireChangeBooking> result = londonApi.getAvailableTimes(fromDate, untilDate, endpoint);
 
         // Assert
         assertThat(result).isNotEmpty();
