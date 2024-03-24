@@ -32,7 +32,7 @@ public class WebController {
     @Autowired
     private TireShopService tireShopService;
 
-    @GetMapping("/tire-changes/view") // Or your relevant mapping
+    @GetMapping("/tire-changes/view")
     public String displayAvailableTimes(Model model,
                                         @RequestParam(required = false) List<String> tireShop,
                                         @RequestParam(required = false) List<String> vehicleType,
