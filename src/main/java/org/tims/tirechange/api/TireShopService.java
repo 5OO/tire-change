@@ -9,6 +9,7 @@ import org.tims.tirechange.configuration.TireShopConfig;
 import org.tims.tirechange.configuration.TireShopConfigLoader;
 import org.tims.tirechange.exception.NoAvailableTimeslotsException;
 import org.tims.tirechange.model.ManchesterTireChangeTime;
+import org.tims.tirechange.model.TimeslotFetchResult;
 import org.tims.tirechange.model.TireChangeBooking;
 
 import java.io.IOException;
@@ -30,11 +31,10 @@ public class TireShopService {
     private TireShopConfigLoader configLoader;
 
     public TimeslotFetchResult findAvailableTimes(LocalDate from, LocalDate until,
-                                                      List<String> tireShopName, List<String> vehicleTypes) throws IOException {
+                                                  List<String> tireShopName, List<String> vehicleTypes) throws IOException {
         List<TireChangeBooking> allResults = new ArrayList<>();
         List<String> warnings = new ArrayList<>();
         List<TireShopConfig> tireShops = configLoader.loadConfig("src/main/resources/tire_shops.json");
-
         logger.info("shops configurations loaded from JSON file...");
 
         for (TireShopConfig shop : tireShops) {
@@ -83,9 +83,6 @@ public class TireShopService {
                     })
                     .collect(Collectors.toList());
         }
-
-
-
         return new TimeslotFetchResult(allResults, warnings);
     }
 
@@ -99,7 +96,6 @@ public class TireShopService {
         // Adjusting vehicleType [ ] here
         String joinedVehicleTypes = String.join(", ", currentShopConfig.getVehicleTypes());
         booking.setVehicleType(joinedVehicleTypes);
-//        booking.setVehicleType(Arrays.toString(currentShopConfig.getVehicleTypes()));
         booking.setApiIdentifier("Manchester");
         return booking;
     }

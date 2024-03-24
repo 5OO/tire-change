@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import org.tims.tirechange.api.TimeslotFetchResult;
 import org.tims.tirechange.api.TireShopService;
 import org.tims.tirechange.configuration.TireShopConfigLoader;
+import org.tims.tirechange.model.TimeslotFetchResult;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -80,7 +80,6 @@ public class WebController {
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("errorMessage", "Booking failed: " + e.getMessage());
         }
-
         return "redirect:/tire-changes/view";
     }
 }

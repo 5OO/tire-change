@@ -1,9 +1,8 @@
-package org.tims.tirechange.api;
+package org.tims.tirechange.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
-import org.tims.tirechange.model.TireChangeBooking;
 
 import java.util.List;
 
