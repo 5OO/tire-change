@@ -131,7 +131,6 @@ class ManchesterApiTest {
 
         // Verify the results
         assertThat(result).isEmpty();
-
     }
 
     @Test
@@ -186,5 +185,53 @@ class ManchesterApiTest {
         assertThat(result.isAvailable()).isFalse();
     }
 
+    @Test
+    void testBookTimeSlot_Failure() throws IOException {
+
+        // Mock dependencies
+        TireShopConfigLoader mockConfigLoader = mock(TireShopConfigLoader.class);
+        RestTemplate mockRestTemplate = mock(RestTemplate.class);
+
+        // Setup mock behavior for configLoader
+        TireShopConfig testConfig = new TireShopConfig();
+        testConfig.setName("Manchester");
+        testConfig.setAddress("14 Bury New Rd, Manchester");
+        testConfig.setVehicleTypes(new String[]{"Car", "Truck"});
+
+        // Create a test ApiConfig instance
+        ApiConfig apiConfig = new ApiConfig();
+
+        apiConfig.setEndpoint("http://localhost:9004/api/v2/tire-change-times/");
+        apiConfig.setType("json");
+
+        testConfig.setApi(apiConfig);
+
+        TireShopConfig dummyConfig = new TireShopConfig(); // Create a dummy config for the first entry
+        dummyConfig.setName("Dummy");
+        dummyConfig.setAddress("Dummy Address");
+        dummyConfig.setVehicleTypes(new String[]{"DummyType"});
+        dummyConfig.setApi(new ApiConfig());
+
+        when(mockConfigLoader.loadConfig("src/main/resources/tire_shops.json")).thenReturn(List.of(dummyConfig, testConfig));
+
+        // Define test data for the request and response
+        String universalId = "60";
+        String contactInformation = "test@example.com"; // This variable should be recognized within your test method.
+        String bookingUrl = testConfig.getApi().getEndpoint() + universalId + "/booking";
+
+        String jsonResponse = "{\n" + "  \"id\": 60,\n" + "  \"time\": \"2024-03-20T09:00:00Z\",\n" + "  \"available\": false\n" + "}";
+
+
+        // Simulate an error response from the API
+        when(mockRestTemplate.exchange(eq(bookingUrl), eq(HttpMethod.POST), any(HttpEntity.class), eq(String.class))).thenReturn(new ResponseEntity<>(HttpStatus.BAD_REQUEST));
+
+        // Instantiate ManchesterApi with mocked dependencies
+        ManchesterApi manchesterApi = new ManchesterApi(mockRestTemplate, mockConfigLoader);
+
+        // Execute the test method and expect an exception
+        assertThrows(RuntimeException.class, () -> {
+            manchesterApi.bookTimeSlot(universalId, contactInformation);
+        }, "Expected a RuntimeException to be thrown due to API error");
+    }
 
 }
