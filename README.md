@@ -38,7 +38,7 @@ Clone this repository using `git clone https://github.com/5OO/tire-change`
 2. **Open the Project**: Open the project folder by selecting `File > Open Folder`.
 3. **Install and Enable Lombok**: Install the [Lombok Annotations Support for VS Code](https://marketplace.visualstudio.com/items?itemName=GabrielBB.vscode-lombok) and follow its documentation to enable it.
 4. **Run the Application**: Navigate to the `src/main/java/your/package/Application.java` file, right-click, and select `Run Java`.
-
+##  ##
 
 ## The application should run with Thymeleaf **serving the frontend at** `http://localhost:8080/tire-changes/view` ##
 
