@@ -11,14 +11,17 @@ th, td {
 tr:nth-child(even) {
     background-color: #f2f2f2;
 }
+
 tr:hover {
     background-color: #ddd;
 }
+
 /* Optional: Styling for table headers */
 th {
-    background-color: #dddddd;  /* Example header color */
-    color: black;              /* Example header text color */
+    background-color: #dddddd; /* Example header color */
+    color: black; /* Example header text color */
 }
+
 .btn-primary {
     background-color: #a94442; /* Darker shade of red */
     border-color: #a94442;
@@ -32,7 +35,7 @@ th {
 
 /* Adjusting success and error messages to fit the red accent */
 .success, .error {
-    border-radius: 4px;
+    border-radius: 1px;
     text-align: center;
     padding: 10px;
     margin-bottom: 0px;
@@ -60,8 +63,34 @@ th {
     background-color: #fff3cd;
     color: #856404;
     border-color: #ffeeba;
-    padding: 5px;
-    border-radius: 4px;
+    padding: 10px;
+    border-radius: 1px;
     text-align: center;
 
 }
+
+.filter-container {
+    padding: 1px; /* Adds space around the content inside the container */
+    margin-left: 1px;
+    margin-right: 1px;
+    margin-bottom: 5px;
+}
+
+.time-slots {
+    padding: 2px; /* Adds space around the content inside the container */
+    margin-top: 5px;
+    margin-bottom: 50px;
+}
+
+.button-container {
+    margin-top: 10px;
+    margin-bottom: 5px;
+}
+
+.filter-item {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* This adds some space between the label and the select box */
+}
+
+

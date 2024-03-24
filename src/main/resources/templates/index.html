@@ -26,69 +26,95 @@
 </div>
 
 <!-- Filters Section -->
+<div class="container filter-container">
+    <div class="row">
+        <div class="col-md-12">
+            <form action="/tire-changes/view" method="get">
+                <div class="filters">
+                    <h3>Filters:</h3>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <!-- Tire Shop Dropdown -->
+                            <div class="filter-item">
+                                <label for="tireShop">Tire Shop:</label>
+                                <select id="tireShop" name="tireShop" multiple>
+                                    <option th:each="shop : ${tireShops}" th:value="${shop.name}"
+                                            th:text="${shop.name}"></option>
+                                </select>
+                            </div>
+                        </div>
 
-<form action="/tire-changes/view" method="get">
-    <div class="filters">
-        <h3>Filters:</h3>
-        <!-- Tire Shop Dropdown -->
-        <label for="tireShop">Tire Shop:</label>
-        <select id="tireShop" name="tireShop" multiple>
-            <option th:each="shop : ${tireShops}" th:value="${shop.name}" th:text="${shop.name}"></option>
-        </select>
+                        <div class="col-md-3">
+                            <!-- Vehicle Type Dropdown -->
+                            <div class="filter-item">
+                                <label for="vehicleType">Vehicle Type:</label>
+                                <select id="vehicleType" name="vehicleType" multiple>
+                                    <option th:each="vehicleType : ${vehicleTypes}" th:value="${vehicleType}"
+                                            th:text="${vehicleType}"></option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <!-- Date Range Picker -->
+                            <div id="datePickerFrom">
+                                <label for="fromDate">Select date from:</label>
+                                <input type="text" name="fromDate" id="fromDate"/>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <!-- Date Range Picker -->
+                            <div id="datePickerUntil">
+                                <label for="untilDate">Select date until:</label>
+                                <input type="text" name="untilDate" id="untilDate"/>
+                            </div>
+                        </div>
+                        <div class="col-md-2"></div>
+                    </div>
+                    <div class="container button-container">
+                        <div class="row justify-content-center">
+                            <button type="submit" id="applyFilters">Apply Filters</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
 
-        <!-- Vehicle Type Dropdown -->
-        <div id="vehicleTypeDropdownContainer">
-            <label for="vehicleType">Vehicle Type:</label>
-            <select id="vehicleType" name="vehicleType" multiple>
-                <option th:each="vehicleType : ${vehicleTypes}" th:value="${vehicleType}"
-                        th:text="${vehicleType}"></option>
-            </select>
         </div>
-
-        <!-- Date Range Picker -->
-        <div id="datePicker">
-            <label for="fromDate">Select date from:</label>
-            <input type="text" name="fromDate" id="fromDate"/>
-            <label for="untilDate">Select date until:</label>
-            <input type="text" name="untilDate" id="untilDate"/>
-        </div>
-
-        <button type="submit" id="applyFilters">Apply Filters</button>
     </div>
-</form>
+</div>
 
-
-<div class="results">
-    <h3>Available Time Slots:</h3>
-    <table id="resultsTable">
-        <thead>
-        <tr>
-            <th>Tire Shop</th>
-            <th>Address</th>
-            <th>Time Slot</th>
-            <th>Vehicle Type</th>
-            <th>Create Booking</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="booking : ${bookings}">
-            <td th:text="${booking.tireShopName}"></td>
-            <td th:text="${booking.tireShopAddress}"></td>
-            <td th:text="${#temporals.format(booking.bookingTime, 'dd-MMMM-yyyy HH:mm ')}"></td>
-            <td th:text="${booking.vehicleType}"></td>
-            <td>
-                <form action="/book-timeslot" method="post">
-                    <!-- Use 'booking' object fields for form values -->
-                    <input type="hidden" name="universalId" th:value="${booking.universalId}"/>
-                    <input type="hidden" name="tireShopName" th:value="${booking.tireShopName}"/>
-                    <!-- hidden field for contactInformation with a constant value -->
-                    <input type="hidden" name="contactInformation" value="defaultContact"/>
-                    <button type="submit">Book</button>
-                </form>
-            </td>
-        </tr>
-        </tbody>
-    </table>
+<div class="container time-slots">
+    <div class="results">
+        <h3>Available Time Slots:</h3>
+        <table id="resultsTable">
+            <thead>
+            <tr>
+                <th>Tire Shop</th>
+                <th>Address</th>
+                <th>Time Slot</th>
+                <th>Vehicle Type</th>
+                <th>Create</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="booking : ${bookings}">
+                <td th:text="${booking.tireShopName}"></td>
+                <td th:text="${booking.tireShopAddress}"></td>
+                <td th:text="${#temporals.format(booking.bookingTime, 'dd-MMMM-yyyy HH:mm ')}"></td>
+                <td th:text="${booking.vehicleType}"></td>
+                <td>
+                    <form action="/book-timeslot" method="post">
+                        <!-- Use 'booking' object fields for form values -->
+                        <input type="hidden" name="universalId" th:value="${booking.universalId}"/>
+                        <input type="hidden" name="tireShopName" th:value="${booking.tireShopName}"/>
+                        <!-- hidden field for contactInformation with a constant value -->
+                        <input type="hidden" name="contactInformation" value="defaultContact"/>
+                        <button type="submit">Booking</button>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
 </div>
 
 
