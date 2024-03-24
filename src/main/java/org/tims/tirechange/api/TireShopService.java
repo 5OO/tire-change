@@ -73,7 +73,6 @@ public class TireShopService {
                 }
             }
         }
-
         // Filter aggregated results based on vehicleType
         if (vehicleTypes != null && !vehicleTypes.isEmpty()) {
             allResults = allResults.stream()
@@ -93,7 +92,6 @@ public class TireShopService {
         booking.setAvailable(manchesterTime.isAvailable());
         booking.setTireShopName(currentShopConfig.getName());
         booking.setTireShopAddress(currentShopConfig.getAddress());
-        // Adjusting vehicleType [ ] here
         String joinedVehicleTypes = String.join(", ", currentShopConfig.getVehicleTypes());
         booking.setVehicleType(joinedVehicleTypes);
         booking.setApiIdentifier("Manchester");

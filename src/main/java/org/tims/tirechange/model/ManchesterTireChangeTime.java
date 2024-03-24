@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @Setter
 public class ManchesterTireChangeTime {
 
-    @JsonProperty("id") // Match JSON field exactly
+    @JsonProperty("id")
     private Integer id;
 
     @JsonProperty("time")

@@ -60,7 +60,6 @@ public class ManchesterApi {
         TireShopConfig config = configLoader.loadConfig("src/main/resources/tire_shops.json").get(1);
         String endpoint = config.getApi().getEndpoint();
         String bookingUrl = endpoint + universalId + "/booking";
-
         logger.info("1 - final booking URL: {}", bookingUrl);
 
         // 2. Prepare JSON request body
@@ -83,10 +82,8 @@ public class ManchesterApi {
             return mapper.readValue(response.getBody(), ManchesterTireChangeTime.class);
         } else {
             logger.info("PUT failed, throwing an error message ");
-            // Throw appropriate exception based on error code
             throw new RuntimeException("Booking failed - Manchester API error");
         }
-
     }
 
     private String createBookingRequestJSON(String clientContactInformation) {

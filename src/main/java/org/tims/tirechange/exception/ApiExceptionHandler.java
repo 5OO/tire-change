@@ -25,8 +25,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(NoAvailableTimeslotsException.class)
-    public ResponseEntity<Object> handleNoAvailableTimeslotsException(
-            NoAvailableTimeslotsException ex, WebRequest request) {
+    public ResponseEntity<Object> handleNoAvailableTimeslotsException(NoAvailableTimeslotsException ex, WebRequest request) {
 
         ApiError apiError = new ApiError(HttpStatus.NOT_FOUND, ex.getMessage(), new ArrayList<>());
         return new ResponseEntity<>(apiError, HttpStatus.NOT_FOUND);

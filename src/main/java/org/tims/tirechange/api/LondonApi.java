@@ -17,12 +17,11 @@ import org.tims.tirechange.model.TireChangeTimesResponse;
 
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
-@Component // Mark this as a Spring-managed bean
+@Component
 public class LondonApi implements TireShopApi {
 
     private static final Logger logger = LoggerFactory.getLogger(LondonApi.class);
@@ -60,7 +59,6 @@ public class LondonApi implements TireShopApi {
                         availableTime.setUniversalId(time.getUuid());
                         availableTime.setBookingTime(java.time.OffsetDateTime.parse(time.getTime()).toLocalDateTime());
                         availableTime.setAvailable(true);
-                        // Adjusting vehicleType [ ] here
                         String joinedVehicleTypes = String.join(", ", config.getVehicleTypes());
                         availableTime.setVehicleType(joinedVehicleTypes);
                         availableTime.setTireShopName(config.getName());
