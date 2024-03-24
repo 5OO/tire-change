@@ -78,4 +78,55 @@ class ManchesterApiTest {
         assertThat(result.get(1).isAvailable()).isTrue();
     }
 
+    @Test
+    void testGetAvailableTimes_noAvailableTimeSlots() throws IOException {
+
+        // Mock dependencies
+        TireShopConfigLoader mockConfigLoader = mock(TireShopConfigLoader.class);
+        RestTemplate mockRestTemplate = mock(RestTemplate.class);
+
+        // Setup mock behavior for configLoader
+        TireShopConfig testConfig = new TireShopConfig();
+        testConfig.setName("Manchester");
+        testConfig.setAddress("14 Bury New Rd, Manchester");
+        testConfig.setVehicleTypes(new String[]{"Car", "Truck"});
+
+        // Create a test ApiConfig instance
+        ApiConfig apiConfig = new ApiConfig();
+
+        apiConfig.setEndpoint("http://localhost:9004/api/v2/tire-change-times/");
+        apiConfig.setType("json");
+
+        testConfig.setApi(apiConfig);
+
+        TireShopConfig dummyConfig = new TireShopConfig(); // Create a dummy config for the first entry
+        dummyConfig.setName("Dummy");
+        dummyConfig.setAddress("Dummy Address");
+        dummyConfig.setVehicleTypes(new String[]{"DummyType"});
+        dummyConfig.setApi(new ApiConfig());
+
+        when(mockConfigLoader.loadConfig("src/main/resources/tire_shops.json")).thenReturn(List.of(dummyConfig, testConfig));
+
+        // Define test data
+        LocalDate from = LocalDate.of(2024, 3, 20);
+        LocalDate until = LocalDate.of(2024, 3, 22);
+        String endpoint = "http://localhost:9004/api/v2/tire-change-times";
+        String jsonResponse = "[]";
+        LocalDateTime expectedDateTime1 = LocalDateTime.parse("2024-03-20T09:00:00", DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+        LocalDateTime expectedDateTime2 = LocalDateTime.parse("2024-03-20T11:00:00", DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+
+        // Setup mock behavior for restTemplate
+        when(mockRestTemplate.getForEntity(Mockito.anyString(), Mockito.eq(String.class))).thenReturn(new ResponseEntity<>(jsonResponse, HttpStatus.OK));
+
+        // Instantiate the ManchesterApi with mocked dependencies
+        ManchesterApi manchesterApi = new ManchesterApi(mockRestTemplate, mockConfigLoader);
+
+        // Execute the test method
+        List<ManchesterTireChangeTime> result = manchesterApi.getAvailableTimes(from, until, endpoint);
+
+        // Verify the results
+        assertThat(result).isEmpty();
+
+    }
+
 }
