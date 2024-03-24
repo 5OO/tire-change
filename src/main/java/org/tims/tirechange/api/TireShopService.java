@@ -85,7 +85,7 @@ public class TireShopService {
         return new TimeslotFetchResult(allResults, warnings);
     }
 
-    private TireChangeBooking mapManchesterToTireChangeBooking(ManchesterTireChangeTime manchesterTime, TireShopConfig currentShopConfig) {
+    TireChangeBooking mapManchesterToTireChangeBooking(ManchesterTireChangeTime manchesterTime, TireShopConfig currentShopConfig) {
         TireChangeBooking booking = new TireChangeBooking();
         booking.setUniversalId(String.valueOf(manchesterTime.getId()));
         booking.setBookingTime(manchesterTime.getBookingTime());
