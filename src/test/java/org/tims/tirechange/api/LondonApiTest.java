@@ -122,7 +122,7 @@ class LondonApiTest {
         // Act & Assert
         NoAvailableTimeslotsException thrown = assertThrows(
                 NoAvailableTimeslotsException.class,
-                () -> londonApi.getAvailableTimes(LocalDate.now(), LocalDate.now().plusDays(1)),
+                () -> londonApi.getAvailableTimes(LocalDate.now(), LocalDate.now().plusDays(1), testConfig.getApi().getEndpoint()),
                 "Expected getAvailableTimes to throw, but it didn't"
         );
 
