@@ -25,7 +25,6 @@ class ManchesterApiTest {
     @Test
     void testGetAvailableTimes_availableTimeSlots() throws IOException {
 
-
         // Mock dependencies
         TireShopConfigLoader mockConfigLoader = mock(TireShopConfigLoader.class);
         RestTemplate mockRestTemplate = mock(RestTemplate.class);
@@ -50,7 +49,6 @@ class ManchesterApiTest {
         dummyConfig.setVehicleTypes(new String[]{"DummyType"});
         dummyConfig.setApi(new ApiConfig());
 
-
         when(mockConfigLoader.loadConfig("src/main/resources/tire_shops.json")).thenReturn(List.of(dummyConfig, testConfig));
 
         // Define test data
@@ -60,7 +58,6 @@ class ManchesterApiTest {
         String jsonResponse = "[{\"id\":1,\"time\":\"2024-03-20T09:00:00Z\",\"available\":true}, {\"id\":2,\"time\":\"2024-03-20T11:00:00Z\",\"available\":true}]";
         LocalDateTime expectedDateTime1 = LocalDateTime.parse("2024-03-20T09:00:00", DateTimeFormatter.ISO_LOCAL_DATE_TIME);
         LocalDateTime expectedDateTime2 = LocalDateTime.parse("2024-03-20T11:00:00", DateTimeFormatter.ISO_LOCAL_DATE_TIME);
-
 
         // Setup mock behavior for restTemplate
         when(mockRestTemplate.getForEntity(Mockito.anyString(), Mockito.eq(String.class))).thenReturn(new ResponseEntity<>(jsonResponse, HttpStatus.OK));
