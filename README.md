@@ -2,21 +2,19 @@
 
 ## Project Overview
 
-This project is a tire change booking application, allowing users to view available tire change times and book appointments. The backend is built with Java 17, Spring Boot, and Maven, while the frontend uses Vue.js with Vite.
+This project is a tire change booking application, allowing users to view available tire change times and book appointments. The backend is built with Java 17, Spring Boot, and Maven, while the frontend is built with Thymeleaf for server-side rendering.
 
 ## Prerequisites
 
 Before you begin, ensure you have the following installed:
 - Java 17
 - Maven
-- Node.js (for the frontend)
-- Your preferred IDE (IntelliJ IDEA or VS Code)
+- Your preferred IDE (IntelliJ IDEA is recommended)
 
-## Setting Up and Running the Backend
+## Setting Up and Running the Application
 ## Getting Started
 
 Clone this repository using `git clone https://github.com/5OO/tire-change`
-
 
 
 ## Building the Application
@@ -41,6 +39,8 @@ Clone this repository using `git clone https://github.com/5OO/tire-change`
 3. **Install and Enable Lombok**: Install the [Lombok Annotations Support for VS Code](https://marketplace.visualstudio.com/items?itemName=GabrielBB.vscode-lombok) and follow its documentation to enable it.
 4. **Run the Application**: Navigate to the `src/main/java/your/package/Application.java` file, right-click, and select `Run Java`.
 
+### The application should run with Thymeleaf **serving the frontend at** `http://localhost:8080/tire-changes/view` ###
+
 # Contribution
 
 Contributions to both the frontend and backend are welcome. Please ensure to follow the project's coding standards.
@@ -52,13 +52,7 @@ To contribute:
 4. Push to the branch (`git push origin feature/yourFeature`)
 5. Create a new Pull Request
 
-## Frontend Setup:
-1. Navigate to the frontend directory: `cd frontend`
-2. Install dependencies: `npm install`
-3. Serve the application: `npm run serve`
-
 ### Note:
 
-- The instructions assume basic familiarity with running Java and Node.js projects.
+- The instructions assume basic familiarity with running Java projects.
 - For VS Code users, especially on Mac, Lombok might require additional setup. Instructions are generalized because the exact steps can depend on the extensions and settings used. Users are encouraged to refer to the Lombok documentation or relevant extensions' documentation for detailed setup instructions.
-
