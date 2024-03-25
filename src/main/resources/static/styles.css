@@ -38,7 +38,7 @@ th {
     border-radius: 1px;
     text-align: center;
     padding: 10px;
-    margin-bottom: 0px;
+    margin-bottom: 0;
 }
 
 .success {
@@ -71,6 +71,7 @@ th {
 
 .filter-container {
     padding: 1px; /* Adds space around the content inside the container */
+    padding-top: 20px;
     margin-left: 1px;
     margin-right: 1px;
     margin-bottom: 5px;
@@ -78,6 +79,7 @@ th {
 
 .time-slots {
     padding: 2px; /* Adds space around the content inside the container */
+    padding-top: 20px;
     margin-top: 5px;
     margin-bottom: 50px;
 }
