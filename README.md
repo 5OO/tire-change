@@ -1,4 +1,5 @@
 # Tire Change Booking app
+![image](https://github.com/5OO/tire-change/assets/27925052/e45c1fe5-aed6-46cb-ae7b-ffb376d93546)
 
 ## Project Overview
 
