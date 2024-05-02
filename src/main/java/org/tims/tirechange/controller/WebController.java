@@ -23,14 +23,16 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Controller
-@RequiredArgsConstructor
 public class WebController {
 
-    private static final Logger logger = LoggerFactory.getLogger(WebController.class);
-    @Autowired
     private final TireShopConfigLoader configLoader;
+    private final TireShopService tireShopService;
+
     @Autowired
-    private TireShopService tireShopService;
+    public WebController(TireShopConfigLoader configLoader, TireShopService tireShopService) {
+        this.configLoader = configLoader;
+        this.tireShopService = tireShopService;
+    }
 
     @GetMapping("/tire-changes/view")
     public String displayAvailableTimes(Model model,
