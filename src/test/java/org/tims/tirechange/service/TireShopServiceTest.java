@@ -1,4 +1,4 @@
-package org.tims.tirechange.api;
+package org.tims.tirechange.service;
 
 import org.junit.jupiter.api.Test;
 import org.tims.tirechange.configuration.TireShopConfig;
